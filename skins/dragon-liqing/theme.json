@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-dragon-descendant-li-qing",
+  "name": "龙的传人·李青",
+  "brandSubtitle": "DRAGON DESCENDANT · CODEX DREAM SKIN",
+  "tagline": "金龙破夜，下一段灵感由你出拳。",
+  "projectPrefix": "选择项目 · ",
+  "projectLabel": "◉  选择项目",
+  "statusText": "GOLDEN DRAGON ONLINE",
+  "quote": "DISCIPLINE IS THE BRIDGE",
+  "image": "background.jpg",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.76,
+    "focusY": 0.48,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "colors": {
+    "background": "#061111",
+    "panel": "#102222",
+    "panelAlt": "#183331",
+    "accent": "#c99848",
+    "accentAlt": "#f1cf84",
+    "secondary": "#62a79a",
+    "highlight": "#e4b764",
+    "text": "#fff6e4",
+    "muted": "#b8c6bb",
+    "line": "rgba(201, 152, 72, .30)"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "lanting-ink-tuer-suo",
+  "name": "兰亭墨韵·托儿所",
+  "description": "宣纸剑意",
+  "kind": "dream",
+  "order": 2,
+  "swatchColor": "#52657a",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css",
+  "builtInRevision": 1
+}

@@ -1,0 +1,91 @@
+/* 龙的传人·李青：保持左侧安全区与右侧金龙人物的完整可见。 */
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [data-feature="game-source"] {
+  color: var(--ds-text) !important;
+  text-shadow: var(--ds-content-text-shadow) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [data-feature="game-source"] * {
+  color: inherit !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 {
+  background: rgb(var(--ds-panel-rgb) / .42) !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .24) !important;
+  box-shadow:
+    0 6px 16px rgb(var(--ds-bg-rgb) / .18),
+    inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
+  backdrop-filter: none !important;
+  color: var(--ds-text) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 * {
+  color: inherit !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 svg {
+  color: var(--ds-accent) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26:hover {
+  background: rgb(var(--ds-panel-rgb) / .42) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .52) !important;
+  box-shadow:
+    0 10px 22px rgb(var(--ds-bg-rgb) / .26),
+    inset 0 1px rgb(var(--ds-text-rgb) / .12) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"] {
+  --ds-immersive-composer-solid: rgb(var(--ds-panel-rgb) / .74);
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"]
+  .composer-surface-chrome {
+  background: rgb(var(--ds-panel-rgb) / .74) !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .30) !important;
+  box-shadow:
+    0 10px 26px rgb(var(--ds-bg-rgb) / .24),
+    inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
+  backdrop-filter: blur(14px) saturate(104%) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"]
+  aside.app-shell-left-panel button.bg-token-charts-blue[aria-label="更新"] {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  background: var(--ds-accent) !important;
+  color: rgb(var(--ds-bg-rgb) / .96) !important;
+  box-shadow:
+    0 3px 9px rgb(var(--ds-accent-rgb) / .24),
+    inset 0 1px rgb(var(--ds-text-rgb) / .20) !important;
+  transition:
+    width .18s cubic-bezier(.22, 1, .36, 1),
+    min-width .18s cubic-bezier(.22, 1, .36, 1),
+    padding .18s cubic-bezier(.22, 1, .36, 1),
+    background-color .18s ease !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"]
+  aside.app-shell-left-panel button.bg-token-charts-blue[aria-label="更新"] svg {
+  width: 13px !important;
+  height: 13px !important;
+  color: currentColor !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"]
+  aside.app-shell-left-panel button.bg-token-charts-blue[aria-label="更新"]:hover {
+  width: 52px !important;
+  min-width: 52px !important;
+  padding-inline: 5px !important;
+  background: rgb(var(--ds-accent-alt-rgb) / .96) !important;
+}

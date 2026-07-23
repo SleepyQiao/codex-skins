@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "flame-zhaoxin",
+  "name": "赤焰战场·赵信",
+  "description": "赤焰战场",
+  "kind": "dream",
+  "order": 0,
+  "swatchColor": "#e65a3f",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css",
+  "builtInRevision": 3
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "cyber-neon",
+  "name": "赛博霓虹·霓虹渐变",
+  "description": "",
+  "kind": "dream",
+  "order": 9,
+  "swatchColor": "#16e0ff",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css",
+  "builtInRevision": 3
+}

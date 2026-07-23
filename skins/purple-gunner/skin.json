@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "purple-gunner",
+  "name": "跳跳倩影·女枪",
+  "description": "紫晶柔光",
+  "kind": "dream",
+  "order": 5,
+  "swatchColor": "#c995ff",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css"
+}

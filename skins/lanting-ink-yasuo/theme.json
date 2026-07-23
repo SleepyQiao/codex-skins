@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-lanting-ink-yasuo",
+  "name": "兰亭墨韵·亚索",
+  "brandSubtitle": "LANTING INK RHYME · YASUO",
+  "tagline": "墨起兰亭，剑意随风。",
+  "projectPrefix": "选择项目 · ",
+  "projectLabel": "◉  选择项目",
+  "statusText": "INK WIND ONLINE",
+  "quote": "死亡如风，常伴吾身",
+  "image": "background.jpg",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.74,
+    "focusY": 0.48,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "colors": {
+    "background": "#141918",
+    "panel": "#1d2523",
+    "panelAlt": "#2a3430",
+    "accent": "#b79a62",
+    "accentAlt": "#d4ba7e",
+    "secondary": "#56726e",
+    "highlight": "#e5d5ad",
+    "text": "#f0eee6",
+    "muted": "#b6beb8",
+    "line": "rgba(108, 137, 131, .34)"
+  }
+}

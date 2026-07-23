@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-zhao-xin",
+  "name": "赤焰战场·赵信",
+  "brandSubtitle": "ZHAO XIN · CODEX DREAM SKIN",
+  "tagline": "一点寒芒先到，随后枪出如龙。",
+  "projectPrefix": "选择项目 · ",
+  "projectLabel": "◉  选择项目",
+  "statusText": "DRAGON SPEAR ONLINE",
+  "quote": "一点寒芒先到，随后枪出如龙",
+  "image": "background.jpg",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.69,
+    "focusY": 0.48,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "colors": {
+    "background": "#100708",
+    "panel": "#1c0c0c",
+    "panelAlt": "#2a1010",
+    "accent": "#e65a3f",
+    "accentAlt": "#ff7b57",
+    "secondary": "#be2f24",
+    "highlight": "#ffb08a",
+    "text": "#fff0e8",
+    "muted": "#c8a39a",
+    "line": "rgba(230, 90, 63, .26)"
+  }
+}

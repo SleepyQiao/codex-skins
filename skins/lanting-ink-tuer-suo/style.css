@@ -1,0 +1,74 @@
+/* 兰亭墨韵·托儿所：保留宣纸、水墨和右侧人物的可见层次。 */
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 {
+  background: rgb(var(--ds-panel-rgb) / .42) !important;
+  background-color: rgb(var(--ds-panel-rgb) / .42) !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .20) !important;
+  box-shadow:
+    0 6px 16px rgb(var(--ds-bg-rgb) / .16),
+    inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
+  backdrop-filter: none !important;
+  color: var(--ds-text) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 * {
+  color: inherit !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 svg {
+  color: var(--ds-accent) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26:hover {
+  background: rgb(var(--ds-panel-rgb) / .42) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .44) !important;
+  box-shadow:
+    0 10px 22px rgb(var(--ds-bg-rgb) / .24),
+    inset 0 1px rgb(var(--ds-text-rgb) / .12) !important;
+}
+
+/* Native sidebar-thread update action keeps its skin-specific accent. */
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"]
+  button[aria-label="更新"].bg-token-charts-blue {
+  min-width: 24px !important;
+  min-height: 24px !important;
+  height: 24px !important;
+  padding-inline: 5px !important;
+  background: rgb(var(--ds-panel-rgb) / .88) !important;
+  border: 0 !important;
+  color: rgb(var(--ds-accent-alt-rgb) / .96) !important;
+  box-shadow:
+    0 4px 12px rgb(var(--ds-bg-rgb) / .30),
+    inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"]
+  button[aria-label="更新"].bg-token-charts-blue:hover {
+  background: rgb(var(--ds-accent-rgb) / .96) !important;
+  color: rgb(var(--ds-bg-rgb) / .98) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"]
+  button[aria-label="更新"].bg-token-charts-blue svg {
+  color: inherit !important;
+}
+
+/* Composer surface remains stable across New Task, chats, and work pages. */
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"] {
+  --ds-immersive-composer-solid: rgb(var(--ds-panel-rgb) / .74);
+}
+
+html.codex-dream-skin[data-dream-theme="preset-lanting-ink-tuer-suo"]
+  .composer-surface-chrome {
+  background: rgb(var(--ds-panel-rgb) / .74) !important;
+  background-color: rgb(var(--ds-panel-rgb) / .74) !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .30) !important;
+  border-width: 1px !important;
+  box-shadow:
+    0 10px 26px rgb(var(--ds-bg-rgb) / .22),
+    inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
+  backdrop-filter: blur(14px) saturate(104%) !important;
+}

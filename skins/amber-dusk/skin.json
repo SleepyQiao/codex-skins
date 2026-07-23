@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "amber-dusk",
+  "name": "琥珀黄昏·暖金渐变",
+  "description": "",
+  "kind": "dream",
+  "order": 7,
+  "swatchColor": "#ffb347",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css",
+  "builtInRevision": 3
+}

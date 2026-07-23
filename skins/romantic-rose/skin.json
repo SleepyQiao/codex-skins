@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "romantic-rose",
+  "name": "桥本有菜·人物柔光",
+  "description": "",
+  "kind": "dream",
+  "order": 10,
+  "swatchColor": "#f08aa3",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css"
+}

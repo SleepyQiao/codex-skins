@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "lanting-ink-yasuo",
+  "name": "兰亭墨韵·亚索",
+  "description": "水墨剑意",
+  "kind": "dream",
+  "order": 1,
+  "swatchColor": "#698681",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css",
+  "builtInRevision": 3
+}

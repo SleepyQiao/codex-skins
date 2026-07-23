@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "forest-mist",
+  "name": "森野薄雾·森野渐变",
+  "description": "",
+  "kind": "dream",
+  "order": 8,
+  "swatchColor": "#7fd1b9",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css",
+  "builtInRevision": 3
+}

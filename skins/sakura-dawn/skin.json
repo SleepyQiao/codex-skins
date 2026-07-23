@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "sakura-dawn",
+  "name": "樱粉晨曦·柔粉渐变",
+  "description": "",
+  "kind": "dream",
+  "order": 6,
+  "swatchColor": "#f0607a",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css",
+  "builtInRevision": 3
+}

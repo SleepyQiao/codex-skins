@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-sakura-dawn",
+  "name": "樱粉晨曦",
+  "brandSubtitle": "SAKURA DAWN · CODEX DREAM SKIN",
+  "tagline": "粉樱和晨光之间，把今天的想法写成代码。",
+  "projectPrefix": "选择项目 · ",
+  "projectLabel": "◉  选择项目",
+  "statusText": "DREAM SKIN ONLINE",
+  "quote": "MAKE SOMETHING WONDERFUL",
+  "image": "background.jpg",
+  "appearance": "light",
+  "art": {
+    "focusX": 0.74,
+    "focusY": 0.48,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "colors": {
+    "background": "#fdf3f5",
+    "panel": "#ffffff",
+    "panelAlt": "#fff5f8",
+    "accent": "#f0607a",
+    "accentAlt": "#f7889c",
+    "secondary": "#f5a3b3",
+    "highlight": "#d84a68",
+    "text": "#3a2a30",
+    "muted": "#9a8288",
+    "line": "rgba(240, 96, 122, .22)"
+  },
+  "promoTitle": "感谢 Passion8 赞助",
+  "promoSub": "passion8.cc",
+  "promoUrl": "https://passion8.cc/register?aff=TuPe"
+}

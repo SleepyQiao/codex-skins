@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "midnight-aurora",
+  "name": "午夜极光·极光渐变",
+  "description": "",
+  "kind": "dream",
+  "order": 3,
+  "swatchColor": "#2de1c2",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css",
+  "builtInRevision": 3
+}

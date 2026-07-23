@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-amber-dusk",
+  "name": "琥珀黄昏",
+  "brandSubtitle": "AMBER DUSK · CODEX DREAM SKIN",
+  "tagline": "在琥珀色的晚风里，把未完成的事慢慢做好。",
+  "projectPrefix": "选择项目 · ",
+  "projectLabel": "◉  选择项目",
+  "statusText": "DREAM SKIN ONLINE",
+  "quote": "MAKE SOMETHING WONDERFUL",
+  "image": "background.jpg",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.76,
+    "focusY": 0.50,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "colors": {
+    "background": "#17110c",
+    "panel": "#241a12",
+    "panelAlt": "#31241a",
+    "accent": "#ffb347",
+    "accentAlt": "#ffc772",
+    "secondary": "#ff8a5c",
+    "highlight": "#ffd27a",
+    "text": "#fff3e6",
+    "muted": "#c4a888",
+    "line": "rgba(255, 179, 71, .26)"
+  },
+  "promoTitle": "感谢 Passion8 赞助",
+  "promoSub": "passion8.cc",
+  "promoUrl": "https://passion8.cc/register?aff=TuPe"
+}

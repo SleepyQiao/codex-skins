@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "dragon-liqing",
+  "name": "龙的传人·李青",
+  "description": "金龙墨影",
+  "kind": "dream",
+  "order": 4,
+  "swatchColor": "#c99848",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css"
+}
