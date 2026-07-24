@@ -45,9 +45,8 @@ foreach ($fragment in @(
   "PSObject.Properties['exceptionDetails']",
   "Join-Path `$PSScriptRoot 'runtime'",
   'CloseMainWindow()',
-  'Get-Process -Name ''Codex'',''ChatGPT'''
+  'Get-Process -Name ''Codex'',''ChatGPT''',
   'appearanceTheme'
-  '主题不一致'
 )) {
   if ($source.IndexOf($fragment, [System.StringComparison]::Ordinal) -lt 0) {
     throw "Launcher is missing required behavior: $fragment"

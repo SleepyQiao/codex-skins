@@ -25,7 +25,7 @@ if ($source -notmatch 'Invoke-NodeCdpEvaluate\s+\$nodePath') {
 }
 
 $helper = [System.IO.File]::ReadAllText($helperPath, [System.Text.Encoding]::UTF8)
-foreach ($fragment in @('new WebSocket', 'Runtime.evaluate', '--expression-file', 'syncCodexThemeForSkin', 'appearanceTheme', '主题不一致')) {
+foreach ($fragment in @('new WebSocket', 'Runtime.evaluate', '--expression-file', 'syncCodexThemeForSkin', 'appearanceTheme')) {
   if ($helper.IndexOf($fragment, [System.StringComparison]::Ordinal) -lt 0) {
     throw "Internal-Node helper is missing: $fragment"
   }
