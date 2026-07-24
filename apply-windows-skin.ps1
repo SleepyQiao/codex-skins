@@ -157,7 +157,9 @@ function Invoke-NodeCdpEvaluate([string]$NodePath, [string]$WebSocketUrl, [strin
 }
 function Start-Codex([int]$DebugPort) {
   $executable = Get-CodexExecutable
-  Start-Process -FilePath $executable -ArgumentList "--remote-debugging-port=$DebugPort" | Out-Null
+  $profile = Join-Path ([System.IO.Path]::GetTempPath()) ("codex-skin-cdp-$PID-$DebugPort")
+  [void](New-Item -ItemType Directory -Path $profile -Force)
+  Start-Process -FilePath $executable -ArgumentList @("--remote-debugging-port=$DebugPort", "--user-data-dir=$profile") | Out-Null
 }
 
 function Stop-CodexGracefully([int]$TimeoutSeconds = 15) {

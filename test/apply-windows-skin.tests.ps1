@@ -30,6 +30,7 @@ foreach ($fragment in @(
   "Get-AppxPackage -Name 'OpenAI.Codex'",
   'app\ChatGPT.exe',
   '--remote-debugging-port=',
+  '--user-data-dir=',
   'http://127.0.0.1:',
   'Runtime.evaluate',
   "PSObject.Properties['error']",

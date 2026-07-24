@@ -29,6 +29,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1
 
 把 `purple-gunner` 替换为下表中的任意皮肤 ID。默认 CDP 端口为 `9222`，可按需要传入 `-Port` 或 `-Timeout`。
 
+Windows 为 CDP 重启 Codex 时会使用每次运行独立的临时用户数据目录，避免已有的 ChatGPT/Codex 单实例吞掉调试参数；不会替换你正常使用的 Codex 数据目录。
+
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 .\skins\cyber-neon -Port 9223 -Timeout 30
 ```
