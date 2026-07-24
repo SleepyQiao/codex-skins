@@ -18,10 +18,9 @@ assert_launcher_marker() {
 
 assert_cdp_request_payload() {
   local expression="$1"
-  local expected
+  local expected="$2"
   local actual
 
-  expected='{"id":1,"method":"Runtime.evaluate","params":{"expression":"document.title","returnByValue":true}}'
   actual="$(cdp_request_payload "$expression")"
   if [[ "$actual" != "$expected" ]]; then
     echo "unexpected CDP request payload: $actual" >&2
@@ -36,7 +35,8 @@ assert_ok architecture_is_compatible x86_64 "x86_64"
 assert_fail architecture_is_compatible x86_64 "arm64"
 assert_fail architecture_is_compatible arm64 "x86_64"
 
-assert_cdp_request_payload document.title
+assert_cdp_request_payload document.title '{"id":1,"method":"Runtime.evaluate","params":{"expression":"document.title","returnByValue":true}}'
+assert_cdp_request_payload 'document.querySelector("a\b").textContent' '{"id":1,"method":"Runtime.evaluate","params":{"expression":"document.querySelector(\"a\\b\").textContent","returnByValue":true}}'
 
 for marker in 'uname -m' 'lipo -archs' 'webSocketTaskWithURL' '--remote-debugging-port='; do
   assert_launcher_marker "$marker"
