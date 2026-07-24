@@ -64,6 +64,15 @@ if ((Resolve-SkinPackage 'purple-gunner' $repositoryRoot) -ne $expectedBuiltInPa
   throw 'A bare skin ID must resolve to skins/<id> beside the launcher.'
 }
 
+$originalLocation = Get-Location
+try {
+  Set-Location ([System.IO.Path]::GetTempPath())
+  if ((Resolve-SkinPackage 'dragon-liqing' $repositoryRoot) -ne (Join-Path (Join-Path $repositoryRoot 'skins') 'dragon-liqing')) {
+    throw 'A bare skin ID must resolve from the launcher root even outside the repository working directory.'
+  }
+} finally {
+  Set-Location $originalLocation
+}
 $packageRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('codex-skin-test-' + [guid]::NewGuid())
 try {
   [void](New-Item -ItemType Directory -Path $packageRoot)
