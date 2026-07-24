@@ -1,11 +1,12 @@
 # Codex 皮肤
 
-这是一个 Codex 桌面端皮肤集合。Windows 启动器会通过 Chrome DevTools Protocol (CDP) 注入所选皮肤。
+这是一个 Codex 桌面端皮肤集合。启动器会通过 Chrome DevTools Protocol (CDP) 注入所选皮肤。
 
 ## 运行要求
 
-- 已安装 Codex 桌面端。启动器优先识别 Microsoft Store 版 `OpenAI.Codex`。
+- 已安装 Codex 桌面端。Windows 启动器优先识别 Microsoft Store 版 `OpenAI.Codex`。
 - Windows PowerShell 5.1 或更高版本。
+- macOS 需要 Codex 安装在 `/Applications/Codex.app`。macOS 启动器使用 Codex 自带的 Node 运行时，不需要 Homebrew 或全局 Node.js。
 
 ## 平台限制
 
@@ -36,20 +37,22 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 
 ## macOS 使用方式
 
-macOS 启动器支持 Intel（`x86_64`）、Apple Silicon / M 系列（`arm64`）和 Universal 版 Codex 或 ChatGPT 应用。请先保存工作，再运行：
+macOS 启动器使用 `/Applications/Codex.app` 内置的 Node 运行时，并通过 Codex 的本机 CDP 页面应用皮肤。请先保存工作，再运行：
 
 ```bash
 chmod +x ./apply-mac-skin.sh
 ./apply-mac-skin.sh flame-zhaoxin
 ```
 
-如果 Codex 安装在其他位置，可显式指定应用包：
+如果 Codex 已经在所选端口启用了 CDP，启动器会直接复用当前会话；否则会正常退出 Codex，再用 `--remote-debugging-port` 重新打开。
+
+需要时可传入 `--port` 或 `--timeout`：
 
 ```bash
-./apply-mac-skin.sh flame-zhaoxin --app-path /Applications/Codex.app
+./apply-mac-skin.sh flame-zhaoxin --port 9222 --timeout 30
 ```
 
-在 Apple Silicon 机器上运行仅支持 Intel 的应用时需要 Rosetta；如果 Rosetta 不可用，启动器会提示对应安装命令。
+请用普通用户运行启动器，不要加 `sudo`。如果旧版本启动器留下了卡住的锁，请先停止那个旧的 `apply-mac-skin.sh` 进程，再重新执行命令。
 
 ## 安全性与升级
 
@@ -90,7 +93,8 @@ chmod +x ./apply-mac-skin.sh
 ```text
 codex-skins/
 |-- apply-windows-skin.ps1     # Windows 启动器
-|-- apply-mac-skin.sh          # macOS 启动器占位文件
+|-- apply-mac-skin.sh          # macOS Node 启动入口
+|-- apply-mac-skin.cjs         # macOS CDP 启动器实现
 |-- runtime/
 |   |-- renderer-inject.js     # CDP 页面注入载荷
 |   `-- dream-skin.css         # 共享皮肤样式
@@ -102,7 +106,8 @@ codex-skins/
 |       |-- background.jpg     # 启动器使用的背景图
 |       `-- thumb.jpg          # 预览图
 `-- test/
-    `-- apply-windows-skin.tests.ps1
+    |-- apply-windows-skin.tests.ps1
+    `-- apply-mac-skin.tests.sh
 ```
 
 ## 皮肤包格式

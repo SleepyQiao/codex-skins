@@ -1,11 +1,12 @@
 # Codex Skins
 
-A collection of desktop skins for Codex, with a Windows launcher that injects the selected skin through Chrome DevTools Protocol (CDP).
+A collection of desktop skins for Codex, with launchers that inject the selected skin through Chrome DevTools Protocol (CDP).
 
 ## Requirements
 
 - Windows with the Codex desktop application installed. The launcher prefers the Microsoft Store package (`OpenAI.Codex`).
 - Windows PowerShell 5.1 or later.
+- macOS with Codex installed at `/Applications/Codex.app`. The macOS launcher uses Codex's bundled Node runtime, so Homebrew or a global Node.js install is not required.
 
 ## Platform Limitation
 
@@ -36,20 +37,22 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 
 ## Use A Skin On macOS
 
-The macOS launcher supports Intel (`x86_64`), Apple Silicon (`arm64`), and Universal Codex or ChatGPT application bundles. Save your work, then run:
+The macOS launcher uses the Node runtime bundled inside `/Applications/Codex.app` and applies the skin through Codex's local CDP page. Save your work, then run:
 
 ```bash
 chmod +x ./apply-mac-skin.sh
 ./apply-mac-skin.sh flame-zhaoxin
 ```
 
-Use an explicit app bundle when Codex is installed elsewhere:
+If Codex is already running with CDP enabled on the selected port, the launcher reuses that session. Otherwise it quits Codex normally and reopens it with `--remote-debugging-port`.
+
+Use `--port` or `--timeout` when needed:
 
 ```bash
-./apply-mac-skin.sh flame-zhaoxin --app-path /Applications/Codex.app
+./apply-mac-skin.sh flame-zhaoxin --port 9222 --timeout 30
 ```
 
-An Intel-only application on Apple Silicon requires Rosetta. The launcher reports the required installation command when Rosetta is unavailable.
+Run the launcher as your normal user, not with `sudo`. If an older stuck launcher left a stale lock, stop that old `apply-mac-skin.sh` process and run the command again.
 
 ## Safety And Upgrades
 
@@ -90,7 +93,8 @@ Click a thumbnail to preview the skin background at full size.
 ```text
 codex-skins/
 |-- apply-windows-skin.ps1     # Windows launcher
-|-- apply-mac-skin.sh          # macOS launcher placeholder
+|-- apply-mac-skin.sh          # macOS Node launcher entrypoint
+|-- apply-mac-skin.cjs         # macOS CDP launcher implementation
 |-- runtime/
 |   |-- renderer-inject.js     # CDP page injection payload
 |   `-- dream-skin.css         # Shared skin styles
@@ -102,7 +106,8 @@ codex-skins/
 |       |-- background.jpg     # Background used by the launcher
 |       `-- thumb.jpg          # Preview image
 `-- test/
-    `-- apply-windows-skin.tests.ps1
+    |-- apply-windows-skin.tests.ps1
+    `-- apply-mac-skin.tests.sh
 ```
 
 ## Skin Package Format
