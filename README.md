@@ -29,7 +29,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1
 
 Replace `purple-gunner` with any skin ID from the table below. The default CDP port is `9222`; use `-Port` or `-Timeout` when needed.
 
-When Windows restarts Codex for CDP, it uses a temporary per-run user-data directory so an existing ChatGPT/Codex single-instance process cannot swallow the debugging flag. Your normal Codex data directory is not replaced.
+When Windows starts Codex for CDP, it uses a temporary user-data directory scoped to the debug port; repeated runs reuse the existing CDP page instead of creating another tray instance. Your normal Codex data directory is not replaced.
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 .\skins\cyber-neon -Port 9223 -Timeout 30

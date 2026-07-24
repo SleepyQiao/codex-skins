@@ -157,7 +157,7 @@ function Invoke-NodeCdpEvaluate([string]$NodePath, [string]$WebSocketUrl, [strin
 }
 function Start-Codex([int]$DebugPort) {
   $executable = Get-CodexExecutable
-  $profile = Join-Path ([System.IO.Path]::GetTempPath()) ("codex-skin-cdp-$PID-$DebugPort")
+  $profile = Join-Path ([System.IO.Path]::GetTempPath()) ("codex-skin-cdp-$DebugPort")
   [void](New-Item -ItemType Directory -Path $profile -Force)
   Start-Process -FilePath $executable -ArgumentList @("--remote-debugging-port=$DebugPort", "--user-data-dir=$profile") | Out-Null
 }
@@ -329,10 +329,18 @@ try {
   $art = "data:$(Get-MimeType $background);base64,$([Convert]::ToBase64String([IO.File]::ReadAllBytes($background)))"
   $themeJson = $theme | ConvertTo-Json -Compress -Depth 32
   $payload = $renderer.Replace('__DREAM_SKIN_CSS_JSON__', ($resolvedCss | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_ART_JSON__', ($art | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_THEME_JSON__', $themeJson).Replace('__DREAM_SKIN_VERSION_JSON__', ('standalone-codex-skin-1' | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_STYLE_REVISION_JSON__', ("standalone-$($theme.id)-$($extension.Length)" | ConvertTo-Json -Compress))
-  Stop-CodexGracefully
   $executable = Get-CodexExecutable
-  Start-Codex $Port
-  $target = Find-CdpTarget $Port $Timeout
+  $target = $null
+  try {
+    $target = Find-CdpTarget $Port 1
+  } catch {
+    $target = $null
+  }
+  if ($null -eq $target) {
+    Stop-CodexGracefully
+    Start-Codex $Port
+    $target = Find-CdpTarget $Port $Timeout
+  }
   Set-CodexWindowChrome $swatch
   $nodePath = Get-CodexNodeRuntime $executable
   Invoke-NodeCdpEvaluate $nodePath $target.webSocketDebuggerUrl $payload

@@ -31,6 +31,8 @@ foreach ($fragment in @(
   'app\ChatGPT.exe',
   '--remote-debugging-port=',
   '--user-data-dir=',
+  'codex-skin-cdp-$DebugPort',
+  'Find-CdpTarget $Port 1',
   'http://127.0.0.1:',
   'Runtime.evaluate',
   "PSObject.Properties['error']",
