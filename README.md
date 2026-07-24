@@ -55,13 +55,13 @@ Click a thumbnail to preview the skin background at full size.
 
 | | | |
 | --- | --- | --- |
-| [<img src="skins/flame-zhaoxin/thumb.jpg" alt="Flame Zhao Xin thumbnail" width="180">](skins/flame-zhaoxin/background.jpg) | [<img src="skins/lanting-ink-yasuo/thumb.jpg" alt="Lanting Ink Yasuo thumbnail" width="180">](skins/lanting-ink-yasuo/background.jpg) | [<img src="skins/lanting-ink-tuer-suo/thumb.jpg" alt="Lanting Ink Tuer Suo thumbnail" width="180">](skins/lanting-ink-tuer-suo/background.jpg) |
+| <a href="skins/flame-zhaoxin/background.jpg"><img src="skins/flame-zhaoxin/thumb.jpg" alt="Flame Zhao Xin thumbnail" width="180"></a> | <a href="skins/lanting-ink-yasuo/background.jpg"><img src="skins/lanting-ink-yasuo/thumb.jpg" alt="Lanting Ink Yasuo thumbnail" width="180"></a> | <a href="skins/lanting-ink-tuer-suo/background.jpg"><img src="skins/lanting-ink-tuer-suo/thumb.jpg" alt="Lanting Ink Tuer Suo thumbnail" width="180"></a> |
 | `flame-zhaoxin` | `lanting-ink-yasuo` | `lanting-ink-tuer-suo` |
-| [<img src="skins/midnight-aurora/thumb.jpg" alt="Midnight Aurora thumbnail" width="180">](skins/midnight-aurora/background.jpg) | [<img src="skins/dragon-liqing/thumb.jpg" alt="Dragon Lee Sin thumbnail" width="180">](skins/dragon-liqing/background.jpg) | [<img src="skins/purple-gunner/thumb.jpg" alt="Purple Gunner thumbnail" width="180">](skins/purple-gunner/background.jpg) |
+| <a href="skins/midnight-aurora/background.jpg"><img src="skins/midnight-aurora/thumb.jpg" alt="Midnight Aurora thumbnail" width="180"></a> | <a href="skins/dragon-liqing/background.jpg"><img src="skins/dragon-liqing/thumb.jpg" alt="Dragon Lee Sin thumbnail" width="180"></a> | <a href="skins/purple-gunner/background.jpg"><img src="skins/purple-gunner/thumb.jpg" alt="Purple Gunner thumbnail" width="180"></a> |
 | `midnight-aurora` | `dragon-liqing` | `purple-gunner` |
-| [<img src="skins/sakura-dawn/thumb.jpg" alt="Sakura Dawn thumbnail" width="180">](skins/sakura-dawn/background.jpg) | [<img src="skins/amber-dusk/thumb.jpg" alt="Amber Dusk thumbnail" width="180">](skins/amber-dusk/background.jpg) | [<img src="skins/forest-mist/thumb.jpg" alt="Forest Mist thumbnail" width="180">](skins/forest-mist/background.jpg) |
+| <a href="skins/sakura-dawn/background.jpg"><img src="skins/sakura-dawn/thumb.jpg" alt="Sakura Dawn thumbnail" width="180"></a> | <a href="skins/amber-dusk/background.jpg"><img src="skins/amber-dusk/thumb.jpg" alt="Amber Dusk thumbnail" width="180"></a> | <a href="skins/forest-mist/background.jpg"><img src="skins/forest-mist/thumb.jpg" alt="Forest Mist thumbnail" width="180"></a> |
 | `sakura-dawn` | `amber-dusk` | `forest-mist` |
-| [<img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180">](skins/cyber-neon/background.jpg) | [<img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180">](skins/romantic-rose/background.jpg) | |
+| <a href="skins/cyber-neon/background.jpg"><img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180"></a> | <a href="skins/romantic-rose/background.jpg"><img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180"></a> | |
 | `cyber-neon` | `romantic-rose` | |
 
 ## Repository Layout
