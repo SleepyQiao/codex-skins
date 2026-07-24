@@ -1,0 +1,301 @@
+﻿[CmdletBinding()]
+param(
+  [Parameter(Mandatory = $true, Position = 0)]
+  [string]$SkinPackage,
+  [ValidateRange(1, 65535)]
+  [int]$Port = 9222,
+  [ValidateRange(1, 120)]
+  [int]$Timeout = 20
+)
+
+Set-StrictMode -Version 3.0
+$ErrorActionPreference = 'Stop'
+
+class LauncherFailure : System.Exception {
+  [int]$ExitCode
+
+  LauncherFailure([int]$exitCode, [string]$message) : base($message) {
+    $this.ExitCode = $exitCode
+  }
+}
+
+function Stop-Launcher([int]$Code, [string]$Message) {
+  throw [LauncherFailure]::new($Code, $Message)
+}
+
+function Read-JsonFile([string]$Path, [string]$Label) {
+  try {
+    $value = Get-Content -LiteralPath $Path -Raw -Encoding UTF8 | ConvertFrom-Json
+  } catch {
+    Stop-Launcher 2 "$Label 不是有效 JSON：$Path"
+  }
+  if ($null -eq $value -or $value -is [System.Array]) {
+    Stop-Launcher 2 "$Label 必须是 JSON 对象：$Path"
+  }
+  return $value
+}
+
+function Get-ManifestValue($Manifest, [string]$Name) {
+  $property = $Manifest.PSObject.Properties[$Name]
+  if ($null -eq $property) { return $null }
+  return $property.Value
+}
+
+function Resolve-PackageFile(
+  [string]$Root,
+  $Relative,
+  [string]$Label,
+  [bool]$Optional = $false
+) {
+  if ($null -eq $Relative -and $Optional) { return $null }
+  if ($Relative -isnot [string] -or [string]::IsNullOrWhiteSpace($Relative)) {
+    Stop-Launcher 2 "skin.json 缺少 $Label"
+  }
+  $normalized = $Relative.Replace('\', '/')
+  $hasInvalidSegment = @($normalized.Split('/') | Where-Object { $_ -eq '' -or $_ -eq '..' }).Count -gt 0
+  if ([System.IO.Path]::IsPathRooted($normalized) -or $hasInvalidSegment) {
+    Stop-Launcher 2 "$Label 必须是皮肤包内的相对路径"
+  }
+  $rootPath = [System.IO.Path]::GetFullPath($Root).TrimEnd('\', '/')
+  $candidate = [System.IO.Path]::GetFullPath((Join-Path $rootPath $normalized))
+  if (-not $candidate.StartsWith("$rootPath$([System.IO.Path]::DirectorySeparatorChar)", [System.StringComparison]::OrdinalIgnoreCase)) {
+    Stop-Launcher 2 "$Label 不得位于皮肤包外"
+  }
+  if (-not (Test-Path -LiteralPath $candidate -PathType Leaf)) {
+    Stop-Launcher 2 "$Label 不存在：$normalized"
+  }
+  return $candidate
+}
+
+function Get-MimeType([string]$Path) {
+  switch ([System.IO.Path]::GetExtension($Path).ToLowerInvariant()) {
+    '.jpg' { return 'image/jpeg' }
+    '.jpeg' { return 'image/jpeg' }
+    '.png' { return 'image/png' }
+    '.webp' { return 'image/webp' }
+    default { return 'application/octet-stream' }
+  }
+}
+
+function Get-CodexExecutable {
+  $storePackage = Get-AppxPackage -Name 'OpenAI.Codex' -ErrorAction SilentlyContinue | Select-Object -First 1
+  if ($null -ne $storePackage -and $storePackage.InstallLocation) {
+    $candidate = Join-Path $storePackage.InstallLocation 'app\ChatGPT.exe'
+    if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
+  }
+  $runningProcess = Get-Process -Name 'Codex' -ErrorAction SilentlyContinue | Select-Object -First 1
+  if ($null -ne $runningProcess -and $runningProcess.Path -and (Test-Path -LiteralPath $runningProcess.Path -PathType Leaf)) {
+    return $runningProcess.Path
+  }
+  $command = Get-Command 'Codex.exe' -ErrorAction SilentlyContinue
+  if ($null -ne $command -and (Test-Path -LiteralPath $command.Source -PathType Leaf)) {
+    return $command.Source
+  }
+  $registryKeys = @(
+    'HKCU:\Software\Microsoft\Windows\CurrentVersion\App Paths\Codex.exe',
+    'HKLM:\Software\Microsoft\Windows\CurrentVersion\App Paths\Codex.exe'
+  )
+  foreach ($key in $registryKeys) {
+    if (Test-Path -LiteralPath $key) {
+      $candidate = (Get-Item -LiteralPath $key).GetValue('')
+      if ($candidate -and (Test-Path -LiteralPath $candidate -PathType Leaf)) { return $candidate }
+    }
+  }
+  $candidates = @(
+    (Join-Path $env:LOCALAPPDATA 'Programs\Codex\Codex.exe'),
+    (Join-Path $env:LOCALAPPDATA 'Codex\Codex.exe'),
+    (Join-Path $env:ProgramFiles 'Codex\Codex.exe'),
+    (Join-Path ${env:ProgramFiles(x86)} 'Codex\Codex.exe')
+  )
+  foreach ($candidate in $candidates) {
+    if ($candidate -and (Test-Path -LiteralPath $candidate -PathType Leaf)) { return $candidate }
+  }
+  Stop-Launcher 3 '未找到 Codex.exe；已检查 PATH、App Paths、LocalAppData 和 Program Files。'
+}
+
+function Start-Codex([int]$DebugPort) {
+  $executable = Get-CodexExecutable
+  Start-Process -FilePath $executable -ArgumentList "--remote-debugging-port=$DebugPort" | Out-Null
+}
+
+function Stop-CodexGracefully([int]$TimeoutSeconds = 15) {
+  $processes = @(Get-Process -Name 'Codex' -ErrorAction SilentlyContinue)
+  if ($processes.Count -eq 0) { return }
+
+  $windowProcesses = @($processes | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero })
+  if ($windowProcesses.Count -eq 0) { return }
+  foreach ($process in $windowProcesses) {
+    $process.Refresh()
+    [void]$process.CloseMainWindow()
+  }
+
+  $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+  while (@(Get-Process -Name 'Codex' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero }).Count -gt 0 -and [DateTime]::UtcNow -lt $deadline) {
+    Start-Sleep -Milliseconds 200
+  }
+  if (@(Get-Process -Name 'Codex' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero }).Count -gt 0) {
+    Stop-Launcher 3 'Codex 未能正常关闭窗口；为避免意外终止，脚本没有强制结束进程。请先处理 Codex 中的未保存内容后重试。'
+  }
+}
+
+function Set-CodexWindowChrome([string]$SwatchColor, [int]$TimeoutSeconds = 4) {
+  try {
+    if ($SwatchColor -notmatch '^#[0-9a-fA-F]{6}$') { return }
+    if (-not ('CodexSkinDwm' -as [type])) {
+      Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+
+public static class CodexSkinDwm {
+  [DllImport("dwmapi.dll", PreserveSig = true)]
+  public static extern int DwmSetWindowAttribute(
+    IntPtr hwnd,
+    int attribute,
+    ref uint value,
+    int valueSize);
+}
+'@
+    }
+
+    $hex = $SwatchColor.Substring(1)
+    $red = [Convert]::ToByte($hex.Substring(0, 2), 16)
+    $green = [Convert]::ToByte($hex.Substring(2, 2), 16)
+    $blue = [Convert]::ToByte($hex.Substring(4, 2), 16)
+    $captionColor = [uint32]($red + ($green * 256) + ($blue * 65536))
+    $brightness = (($red * 299) + ($green * 587) + ($blue * 114)) / 1000
+    $textColor = if ($brightness -ge 160) { [uint32]0x0033263b } else { [uint32]0x00ffffff }
+    $DwmwaBorderColor = 34
+    $DwmwaCaptionColor = 35
+    $DwmwaTextColor = 36
+    $colorSize = [Runtime.InteropServices.Marshal]::SizeOf([uint32])
+    $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+
+    while ([DateTime]::UtcNow -lt $deadline) {
+      foreach ($process in @(Get-Process -Name 'Codex' -ErrorAction SilentlyContinue)) {
+        $process.Refresh()
+        if ($process.MainWindowHandle -eq [IntPtr]::Zero) { continue }
+        [void][CodexSkinDwm]::DwmSetWindowAttribute($process.MainWindowHandle, $DwmwaCaptionColor, [ref]$captionColor, $colorSize)
+        [void][CodexSkinDwm]::DwmSetWindowAttribute($process.MainWindowHandle, $DwmwaBorderColor, [ref]$captionColor, $colorSize)
+        [void][CodexSkinDwm]::DwmSetWindowAttribute($process.MainWindowHandle, $DwmwaTextColor, [ref]$textColor, $colorSize)
+        return
+      }
+      Start-Sleep -Milliseconds 200
+    }
+  } catch {
+    Write-Verbose "Unable to apply Codex window color: $($_.Exception.Message)"
+  }
+}
+
+function Find-CdpTarget([int]$DebugPort, [int]$TimeoutSeconds) {
+  $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+  while ([DateTime]::UtcNow -lt $deadline) {
+    try {
+      $targets = Invoke-RestMethod -Uri "http://127.0.0.1:$DebugPort/json/list" -TimeoutSec 2
+      $pages = @($targets | Where-Object { $_.type -eq 'page' -and $_.webSocketDebuggerUrl })
+      $target = @($pages | Where-Object { $_.url -eq 'app://-/index.html' } | Select-Object -First 1)
+      if ($target.Count -eq 1) { return $target[0] }
+      if ($pages.Count -eq 1) { return $pages[0] }
+    } catch {
+      # Codex may still be starting; retry until the deadline.
+    }
+    Start-Sleep -Milliseconds 250
+  }
+  Stop-Launcher 4 "CDP 在 $TimeoutSeconds 秒内未出现：http://127.0.0.1:$DebugPort/json/list"
+}
+
+function Invoke-CdpEvaluate([string]$WebSocketUrl, [string]$Expression) {
+  $socket = [System.Net.WebSockets.ClientWebSocket]::new()
+  $tokenSource = [System.Threading.CancellationTokenSource]::new()
+  try {
+    $tokenSource.CancelAfter(5000)
+    $socket.ConnectAsync([uri]$WebSocketUrl, $tokenSource.Token).GetAwaiter().GetResult() | Out-Null
+    $request = @{ id = 1; method = 'Runtime.evaluate'; params = @{ expression = $Expression; returnByValue = $true; awaitPromise = $false } } | ConvertTo-Json -Compress -Depth 8
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($request)
+    $segment = [System.ArraySegment[byte]]::new($bytes)
+    $socket.SendAsync($segment, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, $tokenSource.Token).GetAwaiter().GetResult() | Out-Null
+    do {
+      $stream = [System.IO.MemoryStream]::new()
+      do {
+        $buffer = New-Object byte[] 8192
+        $result = $socket.ReceiveAsync([System.ArraySegment[byte]]::new($buffer), $tokenSource.Token).GetAwaiter().GetResult()
+        if ($result.MessageType -eq [System.Net.WebSockets.WebSocketMessageType]::Close) {
+          Stop-Launcher 5 'CDP WebSocket 在返回结果前关闭。'
+        }
+        $stream.Write($buffer, 0, $result.Count)
+      } while (-not $result.EndOfMessage)
+      $response = [System.Text.Encoding]::UTF8.GetString($stream.ToArray()) | ConvertFrom-Json
+    } while ($response.id -ne 1)
+    $errorProperty = $response.PSObject.Properties['error']
+    if ($null -ne $errorProperty -and $null -ne $errorProperty.Value) {
+      Stop-Launcher 5 "CDP 执行失败：$($errorProperty.Value | ConvertTo-Json -Compress)"
+    }
+    $resultProperty = $response.PSObject.Properties['result']
+    $exceptionDetailsProperty = if ($null -eq $resultProperty -or $null -eq $resultProperty.Value) {
+      $null
+    } else {
+      $resultProperty.Value.PSObject.Properties['exceptionDetails']
+    }
+    if ($null -ne $exceptionDetailsProperty -and $null -ne $exceptionDetailsProperty.Value) {
+      Stop-Launcher 5 "CDP 页面执行异常：$($exceptionDetailsProperty.Value | ConvertTo-Json -Compress -Depth 16)"
+    }
+    if ($null -eq $resultProperty -or $null -eq $resultProperty.Value) {
+      Stop-Launcher 5 'CDP 未返回 Runtime.evaluate 结果。'
+    }
+    $evaluationResultProperty = $resultProperty.Value.PSObject.Properties['result']
+    if ($null -eq $evaluationResultProperty -or $null -eq $evaluationResultProperty.Value) { return $null }
+    $valueProperty = $evaluationResultProperty.Value.PSObject.Properties['value']
+    if ($null -eq $valueProperty) { return $null }
+    return $valueProperty.Value
+  } catch [LauncherFailure] {
+    throw
+  } catch {
+    Stop-Launcher 5 "CDP WebSocket 失败：$($_.Exception.Message)"
+  } finally {
+    if ($socket.State -eq [System.Net.WebSockets.WebSocketState]::Open) {
+      try { $socket.CloseAsync([System.Net.WebSockets.WebSocketCloseStatus]::NormalClosure, 'done', [System.Threading.CancellationToken]::None).GetAwaiter().GetResult() | Out-Null } catch {}
+    }
+    $tokenSource.Dispose()
+    $socket.Dispose()
+  }
+}
+
+try {
+  $packageRoot = [System.IO.Path]::GetFullPath($SkinPackage)
+  if (-not (Test-Path -LiteralPath $packageRoot -PathType Container)) { Stop-Launcher 2 "皮肤包目录不存在：$SkinPackage" }
+  $runtime = Join-Path $PSScriptRoot 'runtime'
+  foreach ($asset in @('dream-skin.css', 'renderer-inject.js')) {
+    if (-not (Test-Path -LiteralPath (Join-Path $runtime $asset) -PathType Leaf)) { Stop-Launcher 5 "缺少启动器资源：$asset" }
+  }
+  $manifest = Read-JsonFile (Join-Path $packageRoot 'skin.json') 'skin.json'
+  if ($manifest.schemaVersion -ne 1 -or $manifest.kind -ne 'dream') { Stop-Launcher 2 'skin.json 必须声明 schemaVersion: 1 和 kind: "dream"' }
+  if ([string]::IsNullOrWhiteSpace([string](Get-ManifestValue $manifest 'id')) -or [string]::IsNullOrWhiteSpace([string](Get-ManifestValue $manifest 'name'))) { Stop-Launcher 2 'skin.json 必须包含非空 id 和 name' }
+  $swatch = Get-ManifestValue $manifest 'swatchColor'
+  if ($swatch -isnot [string] -or $swatch -notmatch '^#[0-9a-fA-F]{6}$') { Stop-Launcher 2 'skin.json 的 swatchColor 必须为 #RRGGBB' }
+  $background = Resolve-PackageFile $packageRoot (Get-ManifestValue $manifest 'background') 'background'
+  $themePath = Resolve-PackageFile $packageRoot (Get-ManifestValue $manifest 'theme') 'theme'
+  $stylePath = Resolve-PackageFile $packageRoot (Get-ManifestValue $manifest 'style') 'style' $true
+  $theme = Read-JsonFile $themePath 'theme.json'
+  if ([string]::IsNullOrWhiteSpace([string](Get-ManifestValue $theme 'id'))) { Stop-Launcher 2 'theme.json 必须包含非空 id' }
+  $appearance = Get-ManifestValue $theme 'appearance'
+  if ($appearance -isnot [string] -or $appearance -notin @('system', 'light', 'dark')) { Stop-Launcher 2 'theme.json 的 appearance 必须为 system、light 或 dark。' }
+  $css = Get-Content -LiteralPath (Join-Path $runtime 'dream-skin.css') -Raw -Encoding UTF8
+  $renderer = Get-Content -LiteralPath (Join-Path $runtime 'renderer-inject.js') -Raw -Encoding UTF8
+  $extension = if ($null -eq $stylePath) { '' } else { Get-Content -LiteralPath $stylePath -Raw -Encoding UTF8 }
+  $resolvedCss = "$css`n$extension"
+  $art = "data:$(Get-MimeType $background);base64,$([Convert]::ToBase64String([IO.File]::ReadAllBytes($background)))"
+  $themeJson = $theme | ConvertTo-Json -Compress -Depth 32
+  $payload = $renderer.Replace('__DREAM_SKIN_CSS_JSON__', ($resolvedCss | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_ART_JSON__', ($art | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_THEME_JSON__', $themeJson).Replace('__DREAM_SKIN_VERSION_JSON__', ('standalone-codex-skin-1' | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_STYLE_REVISION_JSON__', ("standalone-$($theme.id)-$($extension.Length)" | ConvertTo-Json -Compress))
+  Stop-CodexGracefully
+  Start-Codex $Port
+  $target = Find-CdpTarget $Port $Timeout
+  Set-CodexWindowChrome $swatch
+  Invoke-CdpEvaluate $target.webSocketDebuggerUrl $payload
+  Write-Host "已应用皮肤：$($manifest.name)"
+  exit 0
+} catch [LauncherFailure] {
+  [Console]::Error.WriteLine($_.Exception.Message)
+  exit $_.Exception.ExitCode
+} catch {
+  [Console]::Error.WriteLine($_.Exception.Message)
+  exit 5
+}
