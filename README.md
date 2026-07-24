@@ -22,6 +22,8 @@ On Windows, the Codex toolbar and other native controls may retain system-contro
 ```powershell
 cd E:\codex-skins
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 .\skins\purple-gunner
+# Or pass the skin ID directly:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 purple-gunner
 ```
 
 Replace `purple-gunner` with any skin ID from the table below. The default CDP port is `9222`; use `-Port` or `-Timeout` when needed.

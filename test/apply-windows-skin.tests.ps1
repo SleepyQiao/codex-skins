@@ -51,6 +51,15 @@ function Stop-Launcher([int]$Code, [string]$Message) {
 . ([scriptblock]::Create($functions['Resolve-SkinPackage'].Extent.Text))
 
 $expectedBuiltInPackage = Join-Path (Join-Path $repositoryRoot 'skins') 'purple-gunner'
+$originalLocation = Get-Location
+try {
+  Set-Location $repositoryRoot
+  if ((Resolve-SkinPackage '.\skins\purple-gunner' $repositoryRoot) -ne $expectedBuiltInPackage) {
+    throw 'A relative skin directory path must resolve to the same package.'
+  }
+} finally {
+  Set-Location $originalLocation
+}
 if ((Resolve-SkinPackage 'purple-gunner' $repositoryRoot) -ne $expectedBuiltInPackage) {
   throw 'A bare skin ID must resolve to skins/<id> beside the launcher.'
 }

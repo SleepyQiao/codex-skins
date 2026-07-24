@@ -22,6 +22,8 @@ Windows 版 Codex 的工具栏及其他原生控件颜色可能仍由系统控�
 ```powershell
 cd E:\codex-skins
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 .\skins\purple-gunner
+# 也可以直接传入皮肤 ID：
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 purple-gunner
 ```
 
 把 `purple-gunner` 替换为下表中的任意皮肤 ID。默认 CDP 端口为 `9222`，可按需要传入 `-Port` 或 `-Timeout`。
