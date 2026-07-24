@@ -257,7 +257,11 @@ function Start-Codex([int]$DebugPort) {
   $tempRoot = [System.IO.Path]::GetTempPath()
   $profile = Join-Path $tempRoot ("codex-skin-cdp-$DebugPort")
   $lockfile = Join-Path $profile 'lockfile'
-  if (Test-Path -LiteralPath $lockfile -PathType Leaf) {
+  $profileHasContent = Test-Path -LiteralPath $lockfile -PathType Leaf
+  if (-not $profileHasContent -and (Test-Path -LiteralPath $profile -PathType Container)) {
+    $profileHasContent = $null -ne (Get-ChildItem -LiteralPath $profile -Force | Select-Object -First 1)
+  }
+  if ($profileHasContent) {
     $profile = Join-Path $tempRoot ("codex-skin-cdp-$DebugPort-$PID")
   }
   [void](New-Item -ItemType Directory -Path $profile -Force)
@@ -433,16 +437,35 @@ try {
   $themeJson = $theme | ConvertTo-Json -Compress -Depth 32
   $payload = $renderer.Replace('__DREAM_SKIN_CSS_JSON__', ($resolvedCss | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_ART_JSON__', ($art | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_THEME_JSON__', $themeJson).Replace('__DREAM_SKIN_VERSION_JSON__', ('standalone-codex-skin-1' | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_STYLE_REVISION_JSON__', ("standalone-$($theme.id)-$($extension.Length)" | ConvertTo-Json -Compress))
   $executable = Get-CodexExecutable
+  $fallbackPort = if ($Port -eq 9222) { 9223 } else { $null }
   $target = $null
-  try {
-    $target = Find-CdpTarget $Port 1
-  } catch {
-    $target = $null
+  $probePorts = @($Port)
+  if ($null -ne $fallbackPort) {
+    $probePorts += $fallbackPort
+  }
+  foreach ($candidatePort in $probePorts) {
+    try {
+      $target = Find-CdpTarget $candidatePort 1
+    } catch {
+      $target = $null
+    }
+    if ($null -ne $target) {
+      $Port = $candidatePort
+      break
+    }
   }
   if ($null -eq $target) {
-    Stop-CodexGracefully
+    $startTimeout = if ($null -ne $fallbackPort) { [Math]::Min($Timeout, 5) } else { $Timeout }
     Start-Codex $Port
-    $target = Find-CdpTarget $Port $Timeout
+    try {
+      $target = Find-CdpTarget $Port $startTimeout
+    } catch {
+      if ($null -eq $fallbackPort) { throw }
+      Start-Codex $fallbackPort
+      $Port = $fallbackPort
+      Write-Host "CDP 端口已切换到 $Port"
+      $target = Find-CdpTarget $Port $Timeout
+    }
   }
   Set-CodexWindowChrome $swatch
   $nodePath = Get-CodexNodeRuntime $executable
