@@ -101,6 +101,103 @@ function Get-MimeType([string]$Path) {
   }
 }
 
+function Convert-CodexAppearance($Value) {
+  $appearance = ([string]$Value).Trim().ToLowerInvariant()
+  if ($appearance -eq 'light' -or $appearance -eq 'dark') { return $appearance }
+  return $null
+}
+
+function Get-CodexConfigPath {
+  if (-not [string]::IsNullOrWhiteSpace($env:CODEX_HOME)) {
+    return [System.IO.Path]::GetFullPath((Join-Path $env:CODEX_HOME 'config.toml'))
+  }
+  if (-not [string]::IsNullOrWhiteSpace($env:USERPROFILE)) {
+    return [System.IO.Path]::GetFullPath((Join-Path (Join-Path $env:USERPROFILE '.codex') 'config.toml'))
+  }
+  if (-not [string]::IsNullOrWhiteSpace($env:HOME)) {
+    return [System.IO.Path]::GetFullPath((Join-Path (Join-Path $env:HOME '.codex') 'config.toml'))
+  }
+  return [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot 'config.toml'))
+}
+
+function Get-CodexConfiguredAppearance([string]$Content) {
+  $inDesktop = $false
+  foreach ($rawLine in ($Content -split "\r?\n")) {
+    $line = $rawLine.Trim()
+    if ($line.Length -eq 0 -or $line.StartsWith('#')) { continue }
+    if ($line -match '^\[([^\]]+)\]$') {
+      $inDesktop = $Matches[1] -eq 'desktop'
+      continue
+    }
+    if (-not $inDesktop) { continue }
+    if ($line -match '^appearanceTheme\s*=\s*"([^"]*)"\s*$') {
+      $appearance = Convert-CodexAppearance $Matches[1]
+      if ($null -ne $appearance) { return $appearance }
+    }
+  }
+  return 'light'
+}
+
+function Set-CodexConfiguredAppearance([string]$Content, [string]$Appearance) {
+  $newline = if ($Content.Contains("`r`n")) { "`r`n" } else { "`n" }
+  $lines = [System.Collections.Generic.List[string]]::new()
+  foreach ($line in ($Content -split "\r?\n")) { [void]$lines.Add($line) }
+  $inDesktop = $false
+  $desktopHeader = -1
+  $insertAt = -1
+  for ($index = 0; $index -lt $lines.Count; $index++) {
+    $line = $lines[$index].Trim()
+    if ($line -match '^\[([^\]]+)\]$') {
+      if ($inDesktop -and $insertAt -lt 0) { $insertAt = $index }
+      $inDesktop = $Matches[1] -eq 'desktop'
+      if ($inDesktop) {
+        $desktopHeader = $index
+        $insertAt = -1
+      }
+      continue
+    }
+    if (-not $inDesktop) { continue }
+    if ($line -match '^appearanceTheme\s*=') {
+      $lines[$index] = "appearanceTheme = `"$Appearance`""
+      return [string]::Join($newline, $lines)
+    }
+  }
+  if ($desktopHeader -ge 0) {
+    $targetIndex = if ($insertAt -ge 0) { $insertAt } else { $desktopHeader + 1 }
+    $lines.Insert($targetIndex, "appearanceTheme = `"$Appearance`"")
+    return [string]::Join($newline, $lines)
+  }
+  $suffix = if ($Content.Length -gt 0 -and -not $Content.EndsWith("`n")) { $newline } else { '' }
+  return "${Content}${suffix}[desktop]${newline}appearanceTheme = `"$Appearance`"$newline"
+}
+
+function Sync-CodexThemeForSkin([string]$Appearance, [string]$SkinName) {
+  $expected = Convert-CodexAppearance $Appearance
+  if ($null -eq $expected) { return }
+  $config = Get-CodexConfigPath
+  $content = ''
+  try {
+    if (Test-Path -LiteralPath $config -PathType Leaf) {
+      $content = Get-Content -LiteralPath $config -Raw -Encoding UTF8
+    }
+  } catch {
+    Write-Warning "无法读取 Codex 主题配置：$($_.Exception.Message)；继续应用皮肤。"
+    return
+  }
+  $current = Get-CodexConfiguredAppearance $content
+  if ($current -eq $expected) { return }
+  Write-Warning "主题不一致：当前 Codex 是 $current，皮肤 $SkinName 适配 $expected；已自动切换配置并继续应用皮肤。"
+  try {
+    $parent = Split-Path -Parent $config
+    if (-not (Test-Path -LiteralPath $parent -PathType Container)) {
+      [void](New-Item -ItemType Directory -Path $parent -Force)
+    }
+    [System.IO.File]::WriteAllText($config, (Set-CodexConfiguredAppearance $content $expected), [System.Text.UTF8Encoding]::new($false))
+  } catch {
+    Write-Warning "无法更新 Codex 主题配置：$($_.Exception.Message)；继续应用皮肤。"
+  }
+}
+
 function Get-CodexExecutable {
   $storePackage = Get-AppxPackage -Name 'OpenAI.Codex' -ErrorAction SilentlyContinue | Select-Object -First 1
   if ($null -ne $storePackage -and $storePackage.InstallLocation) {
@@ -327,6 +424,7 @@ try {
   if ([string]::IsNullOrWhiteSpace([string](Get-ManifestValue $theme 'id'))) { Stop-Launcher 2 'theme.json 必须包含非空 id' }
   $appearance = Get-ManifestValue $theme 'appearance'
   if ($appearance -isnot [string] -or $appearance -notin @('system', 'light', 'dark')) { Stop-Launcher 2 'theme.json 的 appearance 必须为 system、light 或 dark。' }
+  Sync-CodexThemeForSkin $appearance $manifest.name
   $css = Get-Content -LiteralPath (Join-Path $runtime 'dream-skin.css') -Raw -Encoding UTF8
   $renderer = Get-Content -LiteralPath (Join-Path $runtime 'renderer-inject.js') -Raw -Encoding UTF8
   $extension = if ($null -eq $stylePath) { '' } else { Get-Content -LiteralPath $stylePath -Raw -Encoding UTF8 }

@@ -16,7 +16,7 @@ $ast = [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [r
 if ($parseErrors.Count -gt 0) { throw 'apply-windows-skin.ps1 must parse without errors.' }
 
 $functions = @{}
-foreach ($name in @('Resolve-PackageFile', 'Resolve-SkinPackage', 'Get-CodexExecutable', 'Stop-CodexGracefully', 'Find-CdpTarget', 'Invoke-CdpEvaluate')) {
+foreach ($name in @('Resolve-PackageFile', 'Resolve-SkinPackage', 'Get-CodexExecutable', 'Stop-CodexGracefully', 'Find-CdpTarget', 'Invoke-CdpEvaluate', 'Sync-CodexThemeForSkin')) {
   $functionAst = $ast.Find(
     { param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name },
     $true
@@ -42,6 +42,8 @@ foreach ($fragment in @(
   "Join-Path `$PSScriptRoot 'runtime'",
   'CloseMainWindow()',
   'Get-Process -Name ''Codex'',''ChatGPT'''
+  'appearanceTheme'
+  '主题不一致'
 )) {
   if ($source.IndexOf($fragment, [System.StringComparison]::Ordinal) -lt 0) {
     throw "Launcher is missing required behavior: $fragment"

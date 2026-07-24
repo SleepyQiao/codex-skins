@@ -114,6 +114,92 @@ function mimeFor(file) {
   return extension === ".png" ? "image/png" : extension === ".webp" ? "image/webp" : "image/jpeg";
 }
 
+function normalizeAppearance(value) {
+  const appearance = String(value || "").trim().toLowerCase();
+  return appearance === "light" || appearance === "dark" ? appearance : "";
+}
+
+function codexConfigPath() {
+  if (process.env.CODEX_HOME?.trim()) return path.join(process.env.CODEX_HOME.trim(), "config.toml");
+  if (process.platform === "win32" && process.env.USERPROFILE?.trim()) {
+    return path.join(process.env.USERPROFILE.trim(), ".codex", "config.toml");
+  }
+  if (process.env.HOME?.trim()) return path.join(process.env.HOME.trim(), ".codex", "config.toml");
+  return path.join(root, "config.toml");
+}
+
+function parseCodexAppearance(content) {
+  let inDesktop = false;
+  for (const raw of content.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    const section = /^\[([^\]]+)\]$/.exec(line);
+    if (section) {
+      inDesktop = section[1] === "desktop";
+      continue;
+    }
+    if (!inDesktop) continue;
+    const match = /^appearanceTheme\s*=\s*"([^"]*)"\s*$/.exec(line);
+    const appearance = normalizeAppearance(match?.[1]);
+    if (appearance) return appearance;
+  }
+  return "light";
+}
+
+function setCodexAppearance(content, appearance) {
+  const newline = content.includes("\r\n") ? "\r\n" : "\n";
+  const lines = content.split(/\r?\n/);
+  let inDesktop = false;
+  let desktopHeader = -1;
+  let insertAt = -1;
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index].trim();
+    const section = /^\[([^\]]+)\]$/.exec(line);
+    if (section) {
+      if (inDesktop && insertAt < 0) insertAt = index;
+      inDesktop = section[1] === "desktop";
+      if (inDesktop) {
+        desktopHeader = index;
+        insertAt = -1;
+      }
+      continue;
+    }
+    if (!inDesktop) continue;
+    if (/^appearanceTheme\s*=/.test(line)) {
+      lines[index] = `appearanceTheme = "${appearance}"`;
+      return lines.join(newline);
+    }
+  }
+  if (desktopHeader >= 0) {
+    lines.splice(insertAt >= 0 ? insertAt : desktopHeader + 1, 0, `appearanceTheme = "${appearance}"`);
+    return lines.join(newline);
+  }
+  const suffix = content && !content.endsWith("\n") && !content.endsWith("\r\n") ? newline : "";
+  return `${content}${suffix}[desktop]${newline}appearanceTheme = "${appearance}"${newline}`;
+}
+
+function syncCodexThemeForSkin(appearance, skinName) {
+  const expected = normalizeAppearance(appearance);
+  if (!expected) return;
+  const config = codexConfigPath();
+  let content = "";
+  try {
+    if (fs.existsSync(config)) content = fs.readFileSync(config, "utf8");
+  } catch (error) {
+    process.stderr.write(`Warning: could not read Codex theme config (${error.message}); continuing skin application.\n`);
+    return;
+  }
+  const current = parseCodexAppearance(content);
+  if (current === expected) return;
+  process.stderr.write(`Warning: 主题不一致：当前 Codex 是 ${current}，皮肤 ${skinName} 适配 ${expected}；已自动切换配置并继续应用皮肤。\n`);
+  try {
+    fs.mkdirSync(path.dirname(config), { recursive: true });
+    fs.writeFileSync(config, setCodexAppearance(content, expected), "utf8");
+  } catch (error) {
+    process.stderr.write(`Warning: could not update Codex theme config (${error.message}); continuing skin application.\n`);
+  }
+}
+
 function buildExpression(skin) {
   const manifestPath = path.join(skin, "skin.json");
   const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
@@ -137,7 +223,7 @@ function buildExpression(skin) {
     if (!renderer.includes(token)) fail(`renderer-inject.js is missing ${token}`);
     renderer = renderer.split(token).join(value);
   }
-  return { expression: renderer, name: manifest.name };
+  return { expression: renderer, name: manifest.name, appearance: theme.appearance };
 }
 
 function acquireLock(port) {
@@ -237,6 +323,7 @@ async function main() {
     if (!fs.existsSync(file)) fail(`Required skin asset is missing: ${file}`);
   }
   const built = buildExpression(skin);
+  syncCodexThemeForSkin(built.appearance, built.name);
   app = resolveApp(app);
   const node = nodeForApp(app);
   let ws = await targetForPort(port);

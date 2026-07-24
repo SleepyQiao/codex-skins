@@ -11,7 +11,7 @@ if [[ "$(head -n 1 "$root/apply-mac-skin.sh")" != "#!$node_bin" ]]; then
   exit 1
 fi
 
-for marker in 'acquireLock' 'targetForPort' 'waitForTarget' 'new WebSocket' 'cua_node' 'remote-debugging-port' 'Another skin application is already running'; do
+for marker in 'acquireLock' 'targetForPort' 'waitForTarget' 'new WebSocket' 'cua_node' 'remote-debugging-port' 'Another skin application is already running' 'syncCodexThemeForSkin' 'appearanceTheme' '主题不一致'; do
   if ! grep -F -- "$marker" "$root/runtime/apply-skin.cjs" >/dev/null; then
     echo "missing required launcher marker: $marker" >&2
     exit 1
