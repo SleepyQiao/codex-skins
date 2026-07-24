@@ -7,6 +7,10 @@ A collection of desktop skins for Codex, with a Windows launcher that injects th
 - Windows with the Codex desktop application installed. The launcher prefers the Microsoft Store package (`OpenAI.Codex`).
 - Windows PowerShell 5.1 or later.
 
+## Platform Limitation
+
+On Windows, the Codex toolbar and other native controls may retain system-controlled colors, so a skin cannot guarantee perfectly unified colors across every toolbar element. macOS does not have this limitation.
+
 ## Use A Skin On Windows
 
 1. Save any work in Codex. The launcher closes only visible Codex windows before restarting the app with CDP enabled; it never force-terminates Codex processes.
@@ -44,6 +48,21 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 | `forest-mist` | Forest Mist | Forest gradient |
 | `cyber-neon` | Cyber Neon | Neon gradient |
 | `romantic-rose` | Romantic Rose | Portrait soft glow |
+
+## Skin Gallery
+
+Click a thumbnail to preview the skin background at full size.
+
+| | | |
+| --- | --- | --- |
+| [<img src="skins/flame-zhaoxin/thumb.jpg" alt="Flame Zhao Xin thumbnail" width="180">](skins/flame-zhaoxin/background.jpg) | [<img src="skins/lanting-ink-yasuo/thumb.jpg" alt="Lanting Ink Yasuo thumbnail" width="180">](skins/lanting-ink-yasuo/background.jpg) | [<img src="skins/lanting-ink-tuer-suo/thumb.jpg" alt="Lanting Ink Tuer Suo thumbnail" width="180">](skins/lanting-ink-tuer-suo/background.jpg) |
+| `flame-zhaoxin` | `lanting-ink-yasuo` | `lanting-ink-tuer-suo` |
+| [<img src="skins/midnight-aurora/thumb.jpg" alt="Midnight Aurora thumbnail" width="180">](skins/midnight-aurora/background.jpg) | [<img src="skins/dragon-liqing/thumb.jpg" alt="Dragon Lee Sin thumbnail" width="180">](skins/dragon-liqing/background.jpg) | [<img src="skins/purple-gunner/thumb.jpg" alt="Purple Gunner thumbnail" width="180">](skins/purple-gunner/background.jpg) |
+| `midnight-aurora` | `dragon-liqing` | `purple-gunner` |
+| [<img src="skins/sakura-dawn/thumb.jpg" alt="Sakura Dawn thumbnail" width="180">](skins/sakura-dawn/background.jpg) | [<img src="skins/amber-dusk/thumb.jpg" alt="Amber Dusk thumbnail" width="180">](skins/amber-dusk/background.jpg) | [<img src="skins/forest-mist/thumb.jpg" alt="Forest Mist thumbnail" width="180">](skins/forest-mist/background.jpg) |
+| `sakura-dawn` | `amber-dusk` | `forest-mist` |
+| [<img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180">](skins/cyber-neon/background.jpg) | [<img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180">](skins/romantic-rose/background.jpg) | |
+| `cyber-neon` | `romantic-rose` | |
 
 ## Repository Layout
 

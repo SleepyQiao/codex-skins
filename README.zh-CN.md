@@ -7,6 +7,10 @@
 - 已安装 Codex 桌面端。启动器优先识别 Microsoft Store 版 `OpenAI.Codex`。
 - Windows PowerShell 5.1 或更高版本。
 
+## 平台限制
+
+Windows 版 Codex 的工具栏及其他原生控件颜色可能仍由系统控制，因此皮肤无法保证所有工具栏元素的颜色完全统一。macOS 版没有此限制。
+
 ## Windows 使用方式
 
 1. 先保存 Codex 中的工作。启动器会关闭可见的 Codex 窗口，再以启用 CDP 的方式重启；它不会强制结束 Codex 进程。
@@ -44,6 +48,21 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 | `forest-mist` | 森野薄雾·森野渐变 | 森野渐变 |
 | `cyber-neon` | 赛博霓虹·霓虹渐变 | 霓虹渐变 |
 | `romantic-rose` | 桥本有菜·人物柔光 | 人物柔光 |
+
+## 皮肤预览
+
+点击缩略图可打开对应皮肤的完整背景图。
+
+| | | |
+| --- | --- | --- |
+| [<img src="skins/flame-zhaoxin/thumb.jpg" alt="Flame Zhao Xin thumbnail" width="180">](skins/flame-zhaoxin/background.jpg) | [<img src="skins/lanting-ink-yasuo/thumb.jpg" alt="Lanting Ink Yasuo thumbnail" width="180">](skins/lanting-ink-yasuo/background.jpg) | [<img src="skins/lanting-ink-tuer-suo/thumb.jpg" alt="Lanting Ink Tuer Suo thumbnail" width="180">](skins/lanting-ink-tuer-suo/background.jpg) |
+| `flame-zhaoxin` | `lanting-ink-yasuo` | `lanting-ink-tuer-suo` |
+| [<img src="skins/midnight-aurora/thumb.jpg" alt="Midnight Aurora thumbnail" width="180">](skins/midnight-aurora/background.jpg) | [<img src="skins/dragon-liqing/thumb.jpg" alt="Dragon Lee Sin thumbnail" width="180">](skins/dragon-liqing/background.jpg) | [<img src="skins/purple-gunner/thumb.jpg" alt="Purple Gunner thumbnail" width="180">](skins/purple-gunner/background.jpg) |
+| `midnight-aurora` | `dragon-liqing` | `purple-gunner` |
+| [<img src="skins/sakura-dawn/thumb.jpg" alt="Sakura Dawn thumbnail" width="180">](skins/sakura-dawn/background.jpg) | [<img src="skins/amber-dusk/thumb.jpg" alt="Amber Dusk thumbnail" width="180">](skins/amber-dusk/background.jpg) | [<img src="skins/forest-mist/thumb.jpg" alt="Forest Mist thumbnail" width="180">](skins/forest-mist/background.jpg) |
+| `sakura-dawn` | `amber-dusk` | `forest-mist` |
+| [<img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180">](skins/cyber-neon/background.jpg) | [<img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180">](skins/romantic-rose/background.jpg) | |
+| `cyber-neon` | `romantic-rose` | |
 
 ## 仓库目录结构
 
