@@ -157,7 +157,12 @@ function Invoke-NodeCdpEvaluate([string]$NodePath, [string]$WebSocketUrl, [strin
 }
 function Start-Codex([int]$DebugPort) {
   $executable = Get-CodexExecutable
-  $profile = Join-Path ([System.IO.Path]::GetTempPath()) ("codex-skin-cdp-$DebugPort")
+  $tempRoot = [System.IO.Path]::GetTempPath()
+  $profile = Join-Path $tempRoot ("codex-skin-cdp-$DebugPort")
+  $lockfile = Join-Path $profile 'lockfile'
+  if (Test-Path -LiteralPath $lockfile -PathType Leaf) {
+    $profile = Join-Path $tempRoot ("codex-skin-cdp-$DebugPort-$PID")
+  }
   [void](New-Item -ItemType Directory -Path $profile -Force)
   Start-Process -FilePath $executable -ArgumentList @("--remote-debugging-port=$DebugPort", "--user-data-dir=$profile") | Out-Null
 }

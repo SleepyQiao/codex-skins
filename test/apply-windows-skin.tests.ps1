@@ -32,6 +32,8 @@ foreach ($fragment in @(
   '--remote-debugging-port=',
   '--user-data-dir=',
   'codex-skin-cdp-$DebugPort',
+  'lockfile',
+  'codex-skin-cdp-$DebugPort-$PID',
   'Find-CdpTarget $Port 1',
   'http://127.0.0.1:',
   'Runtime.evaluate',
