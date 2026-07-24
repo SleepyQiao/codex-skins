@@ -47,6 +47,14 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 macOS 启动器使用 `/Applications/Codex.app` 内置的 Node 运行时，并通过 Codex 的本机 CDP 页面应用皮肤。请先保存工作，再运行：
 
 ```bash
+SKIN=flame-zhaoxin; ROOT="$HOME/Library/Application Support/FollowCodex"; REPO="$ROOT/codex-skins"; mkdir -p "$ROOT"; if [ -d "$REPO/.git" ]; then git -C "$REPO" pull --ff-only; else git clone https://github.com/SleepyQiao/codex-skins.git "$REPO"; fi; if [ ! -L "$ROOT/skins" ]; then [ -e "$ROOT/skins" ] && mv "$ROOT/skins" "$ROOT/skins.backup-$(date +%Y%m%d-%H%M%S)"; fi; ln -sfn "$REPO/skins" "$ROOT/skins"; cd "$REPO" && ./apply-mac-skin.sh "$SKIN"
+```
+
+把 `SKIN=flame-zhaoxin` 替换为下表中的任意皮肤 ID。这条命令会把仓库安装或更新到 `~/Library/Application Support/FollowCodex/codex-skins`，将 FollowCodex 的 `skins` 目录绑定到此仓库，并应用指定皮肤。
+
+如果已经克隆过仓库，也可以直接运行：
+
+```bash
 chmod +x ./apply-mac-skin.sh
 ./apply-mac-skin.sh flame-zhaoxin
 ```

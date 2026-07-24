@@ -47,6 +47,14 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 The macOS launcher uses the Node runtime bundled inside `/Applications/Codex.app` and applies the skin through Codex's local CDP page. Save your work, then run:
 
 ```bash
+SKIN=flame-zhaoxin; ROOT="$HOME/Library/Application Support/FollowCodex"; REPO="$ROOT/codex-skins"; mkdir -p "$ROOT"; if [ -d "$REPO/.git" ]; then git -C "$REPO" pull --ff-only; else git clone https://github.com/SleepyQiao/codex-skins.git "$REPO"; fi; if [ ! -L "$ROOT/skins" ]; then [ -e "$ROOT/skins" ] && mv "$ROOT/skins" "$ROOT/skins.backup-$(date +%Y%m%d-%H%M%S)"; fi; ln -sfn "$REPO/skins" "$ROOT/skins"; cd "$REPO" && ./apply-mac-skin.sh "$SKIN"
+```
+
+Replace `SKIN=flame-zhaoxin` with any skin ID from the table below. The command installs or updates this repository under `~/Library/Application Support/FollowCodex/codex-skins`, binds FollowCodex's `skins` directory to this repository, and applies the selected skin.
+
+If you already cloned the repository, you can also run it directly:
+
+```bash
 chmod +x ./apply-mac-skin.sh
 ./apply-mac-skin.sh flame-zhaoxin
 ```
