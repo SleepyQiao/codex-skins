@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { execFileSync, spawnSync } = require("child_process");
 
-const root = __dirname;
+const root = path.resolve(__dirname, "..");
 let payloadFile = "";
 let requestFile = "";
 let lockDir = "";
@@ -35,7 +35,11 @@ process.on("exit", cleanup);
 function usage() {
   fail("Usage: ./apply-mac-skin.sh <skin-id> [--app-path PATH] [--port N] [--timeout N]", 2);
 }
-
+function requiredOption(name) {
+  const index = process.argv.indexOf(name);
+  if (index < 0 || !process.argv[index + 1]) fail(`Missing ${name}.`);
+  return process.argv[index + 1];
+}
 function positive(value, label) {
   if (!/^\d+$/.test(String(value)) || Number(value) <= 0) fail(`${label} must be a positive integer.`);
 }
@@ -247,7 +251,16 @@ async function main() {
   process.stdout.write(`Applied skin: ${built.name}\n`);
 }
 
-main().catch((error) => {
+async function windowsMain() {
+  const expressionFile = requiredOption("--expression-file");
+  const websocketUrl = requiredOption("--websocket-url");
+  const expression = fs.readFileSync(expressionFile, "utf8");
+  cdpEval(process.execPath, websocketUrl, expression);
+}
+
+const platformIndex = process.argv.indexOf("--platform");
+const entry = platformIndex >= 0 && process.argv[platformIndex + 1] === "windows" ? windowsMain : main;
+entry().catch((error) => {
   process.stderr.write(`${error.message}\n`);
   process.exit(error.exitCode || 1);
 });

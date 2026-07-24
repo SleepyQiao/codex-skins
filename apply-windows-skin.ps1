@@ -139,8 +139,8 @@ function Invoke-NodeCdpEvaluate([string]$NodePath, [string]$WebSocketUrl, [strin
   $expressionFile = [System.IO.Path]::GetTempFileName()
   try {
     [System.IO.File]::WriteAllText($expressionFile, $Expression, [System.Text.UTF8Encoding]::new($false))
-    $helper = Join-Path $PSScriptRoot 'apply-windows-skin.cjs'
-    $output = & $NodePath $helper '--websocket-url' $WebSocketUrl '--expression-file' $expressionFile 2>&1
+    $helper = Join-Path $PSScriptRoot 'runtime\apply-skin.cjs'
+    $output = & $NodePath $helper '--platform' 'windows' '--websocket-url' $WebSocketUrl '--expression-file' $expressionFile 2>&1
     if ($LASTEXITCODE -ne 0) { Stop-Launcher 5 "CDP Node helper failed: $($output -join [Environment]::NewLine)" }
   } finally { Remove-Item -LiteralPath $expressionFile -Force -ErrorAction SilentlyContinue }
 }

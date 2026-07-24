@@ -8,6 +8,8 @@ A collection of desktop skins for Codex, with launchers that inject the selected
 - Windows PowerShell 5.1 or later.
 - macOS with Codex installed at `/Applications/Codex.app`. The macOS launcher uses Codex's bundled Node runtime, so Homebrew or a global Node.js install is not required.
 
+Both platform launchers use the Node runtime bundled inside the Codex desktop application. Windows resolves `resources\cua_node\bin\node.exe`; macOS resolves `Contents/Resources/cua_node/bin/node`. The shared `runtime/apply-skin.cjs` handles the platform-neutral CDP payload evaluation, while the `.ps1` and `.sh` files keep platform-specific launch and restart behavior. No system Node.js installation is required.
+
 ## Platform Limitation
 
 On Windows, the Codex toolbar and other native controls may retain system-controlled colors, so a skin cannot guarantee perfectly unified colors across every toolbar element. macOS does not have this limitation.
@@ -94,8 +96,8 @@ Click a thumbnail to preview the skin background at full size.
 codex-skins/
 |-- apply-windows-skin.ps1     # Windows launcher
 |-- apply-mac-skin.sh          # macOS Node launcher entrypoint
-|-- apply-mac-skin.cjs         # macOS CDP launcher implementation
 |-- runtime/
+|   |-- apply-skin.cjs         # Shared Windows/macOS CDP runtime
 |   |-- renderer-inject.js     # CDP page injection payload
 |   `-- dream-skin.css         # Shared skin styles
 |-- skins/

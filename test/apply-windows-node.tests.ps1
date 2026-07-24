@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 
 $repositoryRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $scriptPath = Join-Path $repositoryRoot 'apply-windows-skin.ps1'
-$helperPath = Join-Path $repositoryRoot 'apply-windows-skin.cjs'
+$helperPath = Join-Path $repositoryRoot 'runtime\apply-skin.cjs'
 $source = [System.IO.File]::ReadAllText($scriptPath, [System.Text.Encoding]::UTF8)
 
 if (-not (Test-Path -LiteralPath $helperPath -PathType Leaf)) {
@@ -10,7 +10,8 @@ if (-not (Test-Path -LiteralPath $helperPath -PathType Leaf)) {
 }
 foreach ($fragment in @(
   'resources\cua_node\bin\node.exe',
-  'apply-windows-skin.cjs',
+  'runtime\apply-skin.cjs',
+  "--platform' 'windows",
   'Get-CodexNodeRuntime',
   'Invoke-NodeCdpEvaluate',
   'WebSocket'

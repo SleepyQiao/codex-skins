@@ -8,6 +8,8 @@
 - Windows PowerShell 5.1 或更高版本。
 - macOS 需要 Codex 安装在 `/Applications/Codex.app`。macOS 启动器使用 Codex 自带的 Node 运行时，不需要 Homebrew 或全局 Node.js。
 
+两个平台的启动器都会使用 Codex 桌面端内置的 Node 运行时：Windows 使用 `resources\cua_node\bin\node.exe`，macOS 使用 `Contents/Resources/cua_node/bin/node`。共享的 `runtime/apply-skin.cjs` 负责与平台无关的 CDP 载荷执行，`.ps1` 和 `.sh` 文件保留各平台的启动与重启逻辑，因此不需要额外安装系统 Node.js。
+
 ## 平台限制
 
 Windows 版 Codex 的工具栏及其他原生控件颜色可能仍由系统控制，因此皮肤无法保证所有工具栏元素的颜色完全统一。macOS 版没有此限制。
@@ -94,8 +96,8 @@ chmod +x ./apply-mac-skin.sh
 codex-skins/
 |-- apply-windows-skin.ps1     # Windows 启动器
 |-- apply-mac-skin.sh          # macOS Node 启动入口
-|-- apply-mac-skin.cjs         # macOS CDP 启动器实现
 |-- runtime/
+|   |-- apply-skin.cjs         # Windows/macOS 共用 CDP 运行时
 |   |-- renderer-inject.js     # CDP 页面注入载荷
 |   `-- dream-skin.css         # 共享皮肤样式
 |-- skins/
