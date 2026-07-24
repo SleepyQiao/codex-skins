@@ -36,25 +36,24 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 
 ## macOS 使用方式
 
-macOS 启动器支持 Intel（x86_64）、Apple Silicon / M 系列（rm64）和 Universal 版 Codex 或 ChatGPT 应用。请先保存工作，再运行：
+macOS 启动器支持 Intel（`x86_64`）、Apple Silicon / M 系列（`arm64`）和 Universal 版 Codex 或 ChatGPT 应用。请先保存工作，再运行：
 
-`ash
+```bash
 chmod +x ./apply-mac-skin.sh
 ./apply-mac-skin.sh flame-zhaoxin
-`
+```
 
 如果 Codex 安装在其他位置，可显式指定应用包：
 
-`ash
+```bash
 ./apply-mac-skin.sh flame-zhaoxin --app-path /Applications/Codex.app
-`
+```
 
 在 Apple Silicon 机器上运行仅支持 Intel 的应用时需要 Rosetta；如果 Rosetta 不可用，启动器会提示对应安装命令。
 
 ## 安全性与升级
 
 启动器仅通过本机 CDP 会话向运行中的 Codex 渲染页面注入皮肤，不会修改 Codex 应用包、替换 Codex 原有功能或改动升级机制。正常退出或重启 Codex 即可回到未应用皮肤的状态；Codex 可按原方式正常升级，升级后需要皮肤时再次运行启动器即可。
-
 ## 可用皮肤
 
 | ID | 皮肤 | 描述 |
