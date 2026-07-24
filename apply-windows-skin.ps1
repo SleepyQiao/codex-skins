@@ -128,6 +128,22 @@ function Get-CodexExecutable {
   Stop-Launcher 3 '未找到 Codex.exe；已检查 PATH、App Paths、LocalAppData 和 Program Files。'
 }
 
+function Get-CodexNodeRuntime([string]$ExecutablePath) {
+  $desktopRoot = Split-Path -Parent $ExecutablePath
+  $nodePath = Join-Path $desktopRoot 'resources\cua_node\bin\node.exe'
+  if (-not (Test-Path -LiteralPath $nodePath -PathType Leaf)) { Stop-Launcher 3 "Codex desktop Node runtime not found: $nodePath" }
+  return $nodePath
+}
+
+function Invoke-NodeCdpEvaluate([string]$NodePath, [string]$WebSocketUrl, [string]$Expression) {
+  $expressionFile = [System.IO.Path]::GetTempFileName()
+  try {
+    [System.IO.File]::WriteAllText($expressionFile, $Expression, [System.Text.UTF8Encoding]::new($false))
+    $helper = Join-Path $PSScriptRoot 'apply-windows-skin.cjs'
+    $output = & $NodePath $helper '--websocket-url' $WebSocketUrl '--expression-file' $expressionFile 2>&1
+    if ($LASTEXITCODE -ne 0) { Stop-Launcher 5 "CDP Node helper failed: $($output -join [Environment]::NewLine)" }
+  } finally { Remove-Item -LiteralPath $expressionFile -Force -ErrorAction SilentlyContinue }
+}
 function Start-Codex([int]$DebugPort) {
   $executable = Get-CodexExecutable
   Start-Process -FilePath $executable -ArgumentList "--remote-debugging-port=$DebugPort" | Out-Null
@@ -301,10 +317,12 @@ try {
   $themeJson = $theme | ConvertTo-Json -Compress -Depth 32
   $payload = $renderer.Replace('__DREAM_SKIN_CSS_JSON__', ($resolvedCss | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_ART_JSON__', ($art | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_THEME_JSON__', $themeJson).Replace('__DREAM_SKIN_VERSION_JSON__', ('standalone-codex-skin-1' | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_STYLE_REVISION_JSON__', ("standalone-$($theme.id)-$($extension.Length)" | ConvertTo-Json -Compress))
   Stop-CodexGracefully
+  $executable = Get-CodexExecutable
   Start-Codex $Port
   $target = Find-CdpTarget $Port $Timeout
   Set-CodexWindowChrome $swatch
-  Invoke-CdpEvaluate $target.webSocketDebuggerUrl $payload
+  $nodePath = Get-CodexNodeRuntime $executable
+  Invoke-NodeCdpEvaluate $nodePath $target.webSocketDebuggerUrl $payload
   Write-Host "已应用皮肤：$($manifest.name)"
   exit 0
 } catch [LauncherFailure] {
