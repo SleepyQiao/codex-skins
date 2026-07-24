@@ -16,7 +16,7 @@ $ast = [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [r
 if ($parseErrors.Count -gt 0) { throw 'apply-windows-skin.ps1 must parse without errors.' }
 
 $functions = @{}
-foreach ($name in @('Resolve-PackageFile', 'Get-CodexExecutable', 'Stop-CodexGracefully', 'Find-CdpTarget', 'Invoke-CdpEvaluate')) {
+foreach ($name in @('Resolve-PackageFile', 'Resolve-SkinPackage', 'Get-CodexExecutable', 'Stop-CodexGracefully', 'Find-CdpTarget', 'Invoke-CdpEvaluate')) {
   $functionAst = $ast.Find(
     { param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name },
     $true
@@ -48,6 +48,12 @@ function Stop-Launcher([int]$Code, [string]$Message) {
 }
 
 . ([scriptblock]::Create($functions['Resolve-PackageFile'].Extent.Text))
+. ([scriptblock]::Create($functions['Resolve-SkinPackage'].Extent.Text))
+
+$expectedBuiltInPackage = Join-Path (Join-Path $repositoryRoot 'skins') 'purple-gunner'
+if ((Resolve-SkinPackage 'purple-gunner' $repositoryRoot) -ne $expectedBuiltInPackage) {
+  throw 'A bare skin ID must resolve to skins/<id> beside the launcher.'
+}
 
 $packageRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('codex-skin-test-' + [guid]::NewGuid())
 try {

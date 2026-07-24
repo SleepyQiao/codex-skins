@@ -67,6 +67,21 @@ function Resolve-PackageFile(
   return $candidate
 }
 
+function Resolve-SkinPackage(
+  [string]$Value,
+  [string]$LauncherRoot = $PSScriptRoot
+) {
+  if ([string]::IsNullOrWhiteSpace($Value)) {
+    Stop-Launcher 2 'Skin package path or ID cannot be empty.'
+  }
+  if ([System.IO.Path]::IsPathRooted($Value) -or $Value.Contains('\') -or $Value.Contains('/')) {
+    return [System.IO.Path]::GetFullPath($Value)
+  }
+  if ($Value.Contains('..')) {
+    Stop-Launcher 2 'Skin ID must not contain ..'
+  }
+  return Join-Path (Join-Path $LauncherRoot 'skins') $Value
+}
 function Get-MimeType([string]$Path) {
   switch ([System.IO.Path]::GetExtension($Path).ToLowerInvariant()) {
     '.jpg' { return 'image/jpeg' }
@@ -260,7 +275,7 @@ function Invoke-CdpEvaluate([string]$WebSocketUrl, [string]$Expression) {
 }
 
 try {
-  $packageRoot = [System.IO.Path]::GetFullPath($SkinPackage)
+  $packageRoot = Resolve-SkinPackage $SkinPackage
   if (-not (Test-Path -LiteralPath $packageRoot -PathType Container)) { Stop-Launcher 2 "皮肤包目录不存在：$SkinPackage" }
   $runtime = Join-Path $PSScriptRoot 'runtime'
   foreach ($asset in @('dream-skin.css', 'renderer-inject.js')) {
