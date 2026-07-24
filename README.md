@@ -33,6 +33,28 @@ Successful execution prints the applied skin name. To verify the launcher files 
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-skin.tests.ps1
 ```
 
+
+## Use A Skin On macOS
+
+The macOS launcher supports Intel (x86_64), Apple Silicon (rm64), and Universal Codex or ChatGPT application bundles. Save your work, then run:
+
+`ash
+chmod +x ./apply-mac-skin.sh
+./apply-mac-skin.sh flame-zhaoxin
+`
+
+Use an explicit app bundle when Codex is installed elsewhere:
+
+`ash
+./apply-mac-skin.sh flame-zhaoxin --app-path /Applications/Codex.app
+`
+
+An Intel-only application on Apple Silicon requires Rosetta. The launcher reports the required installation command when Rosetta is unavailable.
+
+## Safety And Upgrades
+
+The launcher injects the selected skin only into Codex's running renderer through its local CDP session. It does not modify the Codex application bundle, replace Codex features, or alter its update mechanism. Quit or restart Codex normally to return to its unskinned state; install Codex updates normally, then run the launcher again when you want to apply a skin.
+
 ## Available Skins
 
 | ID | Skin | Description |
