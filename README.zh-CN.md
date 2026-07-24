@@ -6,6 +6,7 @@
 
 - 已安装 Codex 桌面端。Windows 启动器优先识别 Microsoft Store 版 `OpenAI.Codex`。
 - Windows PowerShell 5.1 或更高版本。
+- Windows 启动器同时兼容 Codex.exe 和 ChatGPT.exe 两种桌面进程名。
 - macOS 需要 Codex 安装在 `/Applications/Codex.app`。macOS 启动器使用 Codex 自带的 Node 运行时，不需要 Homebrew 或全局 Node.js。
 
 两个平台的启动器都会使用 Codex 桌面端内置的 Node 运行时：Windows 使用 `resources\cua_node\bin\node.exe`，macOS 使用 `Contents/Resources/cua_node/bin/node`。共享的 `runtime/apply-skin.cjs` 负责与平台无关的 CDP 载荷执行，`.ps1` 和 `.sh` 文件保留各平台的启动与重启逻辑，因此不需要额外安装系统 Node.js。

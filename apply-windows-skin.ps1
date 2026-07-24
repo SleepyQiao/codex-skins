@@ -107,13 +107,15 @@ function Get-CodexExecutable {
     $candidate = Join-Path $storePackage.InstallLocation 'app\ChatGPT.exe'
     if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
   }
-  $runningProcess = Get-Process -Name 'Codex' -ErrorAction SilentlyContinue | Select-Object -First 1
+  $runningProcess = Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Select-Object -First 1
   if ($null -ne $runningProcess -and $runningProcess.Path -and (Test-Path -LiteralPath $runningProcess.Path -PathType Leaf)) {
     return $runningProcess.Path
   }
-  $command = Get-Command 'Codex.exe' -ErrorAction SilentlyContinue
-  if ($null -ne $command -and (Test-Path -LiteralPath $command.Source -PathType Leaf)) {
-    return $command.Source
+  foreach ($commandName in @('Codex.exe', 'ChatGPT.exe')) {
+    $command = Get-Command $commandName -ErrorAction SilentlyContinue
+    if ($null -ne $command -and (Test-Path -LiteralPath $command.Source -PathType Leaf)) {
+      return $command.Source
+    }
   }
   $registryKeys = @(
     'HKCU:\Software\Microsoft\Windows\CurrentVersion\App Paths\Codex.exe',
@@ -134,7 +136,7 @@ function Get-CodexExecutable {
   foreach ($candidate in $candidates) {
     if ($candidate -and (Test-Path -LiteralPath $candidate -PathType Leaf)) { return $candidate }
   }
-  Stop-Launcher 3 '未找到 Codex.exe；已检查 PATH、App Paths、LocalAppData 和 Program Files。'
+  Stop-Launcher 3 '未找到 Codex.exe 或 ChatGPT.exe；已检查 PATH、App Paths、LocalAppData 和 Program Files。'
 }
 
 function Get-CodexNodeRuntime([string]$ExecutablePath) {
@@ -159,7 +161,7 @@ function Start-Codex([int]$DebugPort) {
 }
 
 function Stop-CodexGracefully([int]$TimeoutSeconds = 15) {
-  $processes = @(Get-Process -Name 'Codex' -ErrorAction SilentlyContinue)
+  $processes = @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue)
   if ($processes.Count -eq 0) { return }
 
   $windowProcesses = @($processes | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero })
@@ -170,11 +172,11 @@ function Stop-CodexGracefully([int]$TimeoutSeconds = 15) {
   }
 
   $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
-  while (@(Get-Process -Name 'Codex' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero }).Count -gt 0 -and [DateTime]::UtcNow -lt $deadline) {
+  while (@(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero }).Count -gt 0 -and [DateTime]::UtcNow -lt $deadline) {
     Start-Sleep -Milliseconds 200
   }
-  if (@(Get-Process -Name 'Codex' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero }).Count -gt 0) {
-    Stop-Launcher 3 'Codex 未能正常关闭窗口；为避免意外终止，脚本没有强制结束进程。请先处理 Codex 中的未保存内容后重试。'
+  if (@(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero }).Count -gt 0) {
+    Stop-Launcher 3 'Codex/ChatGPT 未能正常关闭窗口；为避免意外终止，脚本没有强制结束进程。请先处理 Codex 中的未保存内容后重试。'
   }
 }
 
@@ -211,7 +213,7 @@ public static class CodexSkinDwm {
     $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
 
     while ([DateTime]::UtcNow -lt $deadline) {
-      foreach ($process in @(Get-Process -Name 'Codex' -ErrorAction SilentlyContinue)) {
+      foreach ($process in @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue)) {
         $process.Refresh()
         if ($process.MainWindowHandle -eq [IntPtr]::Zero) { continue }
         [void][CodexSkinDwm]::DwmSetWindowAttribute($process.MainWindowHandle, $DwmwaCaptionColor, [ref]$captionColor, $colorSize)
