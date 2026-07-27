@@ -37,7 +37,7 @@ foreach ($fragment in @(
   'codex-skin-cdp-$DebugPort-$PID',
   'Find-CdpTarget $candidatePort 1',
   'startupPort',
-  'Stop-CodexGracefully -ExcludeIds',
+  'Stop-CodexGracefully $executable -ExcludeIds',
   '$existingProcessIds',
   '$newProcessIds',
   'Stop-CodexBackgroundProcesses',

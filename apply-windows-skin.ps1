@@ -268,8 +268,14 @@ function Start-Codex([int]$DebugPort) {
   Start-Process -FilePath $executable -ArgumentList @("--remote-debugging-port=$DebugPort", "--user-data-dir=$profile") | Out-Null
 }
 
-function Stop-CodexGracefully([int]$TimeoutSeconds = 15, [int[]]$ExcludeIds = @()) {
-  $processes = @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue)
+function Stop-CodexGracefully(
+  [string]$ExecutablePath,
+  [int]$TimeoutSeconds = 15,
+  [int[]]$ExcludeIds = @()
+) {
+  $processes = @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object {
+    $_.Path -eq $ExecutablePath
+  })
   if ($processes.Count -eq 0) { return }
 
   $windowProcesses = @($processes | Where-Object {
@@ -283,12 +289,12 @@ function Stop-CodexGracefully([int]$TimeoutSeconds = 15, [int[]]$ExcludeIds = @(
 
   $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
   while (@(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object {
-    $_.MainWindowHandle -ne [IntPtr]::Zero -and $ExcludeIds -notcontains $_.Id
+    $_.Path -eq $ExecutablePath -and $_.MainWindowHandle -ne [IntPtr]::Zero -and $ExcludeIds -notcontains $_.Id
   }).Count -gt 0 -and [DateTime]::UtcNow -lt $deadline) {
     Start-Sleep -Milliseconds 200
   }
   if (@(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object {
-    $_.MainWindowHandle -ne [IntPtr]::Zero -and $ExcludeIds -notcontains $_.Id
+    $_.Path -eq $ExecutablePath -and $_.MainWindowHandle -ne [IntPtr]::Zero -and $ExcludeIds -notcontains $_.Id
   }).Count -gt 0) {
     Stop-Launcher 3 'Codex/ChatGPT 未能正常关闭旧窗口；为避免意外终止，脚本没有强制结束进程。请先处理旧窗口中的未保存内容后重试。'
   }
@@ -492,7 +498,7 @@ try {
     if ($newProcessIds.Count -eq 0) {
       Stop-Launcher 3 '已打开 CDP 页面但无法识别新启动的 Codex 进程；为避免关闭错误窗口，脚本停止执行。'
     }
-    Stop-CodexGracefully -ExcludeIds $newProcessIds
+    Stop-CodexGracefully $executable -ExcludeIds $newProcessIds
     Stop-CodexBackgroundProcesses $executable $existingProcessIds $newProcessIds
   }
   Set-CodexWindowChrome $swatch
