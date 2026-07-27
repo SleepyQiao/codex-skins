@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "twilight-palm",
+  "name": "暮色椰影·海风晚霞",
+  "description": "紫蓝海面与珊瑚晚霞之间的静谧专注。",
+  "kind": "dream",
+  "order": 100,
+  "swatchColor": "#e88f91",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css"
+}
