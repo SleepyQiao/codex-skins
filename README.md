@@ -17,7 +17,7 @@ On Windows, the Codex toolbar and other native controls may retain system-contro
 
 ## Use A Skin On Windows
 
-1. Save any work in Codex. The launcher uses an isolated CDP-enabled profile and does not close or force-terminate existing Codex/ChatGPT processes.
+1. Save any work in Codex. The launcher starts one isolated CDP-enabled profile, then gracefully closes older visible Codex/ChatGPT windows; it never force-terminates processes.
 2. Open PowerShell and run the launcher with a skin directory.
 
 ```powershell
@@ -27,9 +27,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 purple-gunner
 ```
 
-Replace `purple-gunner` with any skin ID from the table below. The default CDP port is `9222`; if it cannot expose CDP, the launcher automatically retries on `9223`. Use `-Port` or `-Timeout` when needed.
+Replace `purple-gunner` with any skin ID from the table below. The launcher reuses an existing CDP page on `9222` or `9223`; when it must start a new instance, the default startup port is `9223`. Use `-Port` or `-Timeout` when needed.
 
-On Windows, the launcher first reuses an existing CDP page on `9222` or `9223`. When it needs to start Codex, it uses an isolated temporary user-data directory; if `9222` cannot expose CDP, it retries on `9223`. Repeated runs reuse the existing CDP page instead of creating another tray instance. Your normal Codex data directory is not replaced.
+On Windows, the launcher first reuses an existing CDP page. If none exists, it starts exactly one isolated temporary profile on `9223`, waits for CDP, then gracefully closes older visible Codex/ChatGPT windows. Repeated runs reuse the existing CDP page instead of creating another tray instance. Your normal Codex data directory is not replaced.
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 .\skins\cyber-neon -Port 9223 -Timeout 30

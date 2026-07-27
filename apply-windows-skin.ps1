@@ -268,11 +268,13 @@ function Start-Codex([int]$DebugPort) {
   Start-Process -FilePath $executable -ArgumentList @("--remote-debugging-port=$DebugPort", "--user-data-dir=$profile") | Out-Null
 }
 
-function Stop-CodexGracefully([int]$TimeoutSeconds = 15) {
+function Stop-CodexGracefully([int]$TimeoutSeconds = 15, [int[]]$ExcludeIds = @()) {
   $processes = @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue)
   if ($processes.Count -eq 0) { return }
 
-  $windowProcesses = @($processes | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero })
+  $windowProcesses = @($processes | Where-Object {
+    $_.MainWindowHandle -ne [IntPtr]::Zero -and $ExcludeIds -notcontains $_.Id
+  })
   if ($windowProcesses.Count -eq 0) { return }
   foreach ($process in $windowProcesses) {
     $process.Refresh()
@@ -280,14 +282,17 @@ function Stop-CodexGracefully([int]$TimeoutSeconds = 15) {
   }
 
   $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
-  while (@(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero }).Count -gt 0 -and [DateTime]::UtcNow -lt $deadline) {
+  while (@(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object {
+    $_.MainWindowHandle -ne [IntPtr]::Zero -and $ExcludeIds -notcontains $_.Id
+  }).Count -gt 0 -and [DateTime]::UtcNow -lt $deadline) {
     Start-Sleep -Milliseconds 200
   }
-  if (@(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero }).Count -gt 0) {
-    Stop-Launcher 3 'Codex/ChatGPT 未能正常关闭窗口；为避免意外终止，脚本没有强制结束进程。请先处理 Codex 中的未保存内容后重试。'
+  if (@(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue | Where-Object {
+    $_.MainWindowHandle -ne [IntPtr]::Zero -and $ExcludeIds -notcontains $_.Id
+  }).Count -gt 0) {
+    Stop-Launcher 3 'Codex/ChatGPT 未能正常关闭旧窗口；为避免意外终止，脚本没有强制结束进程。请先处理旧窗口中的未保存内容后重试。'
   }
 }
-
 function Set-CodexWindowChrome([string]$SwatchColor, [int]$TimeoutSeconds = 4) {
   try {
     if ($SwatchColor -notmatch '^#[0-9a-fA-F]{6}$') { return }
@@ -437,11 +442,10 @@ try {
   $themeJson = $theme | ConvertTo-Json -Compress -Depth 32
   $payload = $renderer.Replace('__DREAM_SKIN_CSS_JSON__', ($resolvedCss | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_ART_JSON__', ($art | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_THEME_JSON__', $themeJson).Replace('__DREAM_SKIN_VERSION_JSON__', ('standalone-codex-skin-1' | ConvertTo-Json -Compress)).Replace('__DREAM_SKIN_STYLE_REVISION_JSON__', ("standalone-$($theme.id)-$($extension.Length)" | ConvertTo-Json -Compress))
   $executable = Get-CodexExecutable
-  $fallbackPort = if ($Port -eq 9222) { 9223 } else { $null }
   $target = $null
   $probePorts = @($Port)
-  if ($null -ne $fallbackPort) {
-    $probePorts += $fallbackPort
+  if ($Port -eq 9222) {
+    $probePorts += 9223
   }
   foreach ($candidatePort in $probePorts) {
     try {
@@ -455,17 +459,22 @@ try {
     }
   }
   if ($null -eq $target) {
-    $startTimeout = if ($null -ne $fallbackPort) { [Math]::Min($Timeout, 5) } else { $Timeout }
-    Start-Codex $Port
-    try {
-      $target = Find-CdpTarget $Port $startTimeout
-    } catch {
-      if ($null -eq $fallbackPort) { throw }
-      Start-Codex $fallbackPort
-      $Port = $fallbackPort
+    $existingProcessIds = @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue |
+      Select-Object -ExpandProperty Id)
+    $startupPort = if ($Port -eq 9222) { 9223 } else { $Port }
+    Start-Codex $startupPort
+    if ($startupPort -ne $Port) {
+      $Port = $startupPort
       Write-Host "CDP 端口已切换到 $Port"
-      $target = Find-CdpTarget $Port $Timeout
     }
+    $target = Find-CdpTarget $Port $Timeout
+    $newProcessIds = @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue |
+      Where-Object { $existingProcessIds -notcontains $_.Id } |
+      Select-Object -ExpandProperty Id)
+    if ($newProcessIds.Count -eq 0) {
+      Stop-Launcher 3 '已打开 CDP 页面但无法识别新启动的 Codex 进程；为避免关闭错误窗口，脚本停止执行。'
+    }
+    Stop-CodexGracefully -ExcludeIds $newProcessIds
   }
   Set-CodexWindowChrome $swatch
   $nodePath = Get-CodexNodeRuntime $executable

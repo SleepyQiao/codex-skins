@@ -36,9 +36,10 @@ foreach ($fragment in @(
   'Get-ChildItem -LiteralPath $profile -Force',
   'codex-skin-cdp-$DebugPort-$PID',
   'Find-CdpTarget $candidatePort 1',
-  '$fallbackPort',
-  '$startTimeout',
-  'Write-Host "CDP',
+  'startupPort',
+  'Stop-CodexGracefully -ExcludeIds',
+  '$existingProcessIds',
+  '$newProcessIds',
   'http://127.0.0.1:',
   'Runtime.evaluate',
   "PSObject.Properties['error']",
@@ -54,6 +55,7 @@ foreach ($fragment in @(
 }
 if ($source -match 'Stop-Process\s+-Force') { throw 'Launcher must not force-terminate Codex.' }
 if ($source -match '(?ms)if \(\$null -eq \$target\) \{\s+Stop-CodexGracefully') { throw 'Launcher must not close the existing app before an isolated CDP launch.' }
+if ($source -match 'Start-Codex\s+\$fallbackPort') { throw 'Launcher must not start a second fallback Codex instance.' }
 
 function Stop-Launcher([int]$Code, [string]$Message) {
   throw "Launcher failure ${Code}: $Message"

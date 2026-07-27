@@ -17,7 +17,7 @@ Windows 版 Codex 的工具栏及其他原生控件颜色可能仍由系统控�
 
 ## Windows 使用方式
 
-1. 先保存 Codex 中的工作。启动器会使用独立的 CDP 用户目录，不会关闭或强制结束现有的 Codex/ChatGPT 进程。
+1. 先保存 Codex 中的工作。启动器会先启动一个独立的 CDP 用户目录，成功后优雅关闭旧的可见 Codex/ChatGPT 窗口；不会强制结束进程。
 2. 打开 PowerShell，传入想使用的皮肤目录。
 
 ```powershell
@@ -27,9 +27,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 purple-gunner
 ```
 
-把 `purple-gunner` 替换为下表中的任意皮肤 ID。默认 CDP 端口为 `9222`；如果该端口无法提供 CDP，启动器会自动尝试 `9223`。可按需要传入 `-Port` 或 `-Timeout`。
+把 `purple-gunner` 替换为下表中的任意皮肤 ID。启动器会先复用 `9222` 或 `9223` 上的 CDP 页面；需要新启动时默认使用 `9223`。可按需要传入 `-Port` 或 `-Timeout`。
 
-Windows 启动器会先复用 `9222` 或 `9223` 上已有的 CDP 页面。需要启动 Codex 时会使用独立的临时用户数据目录；如果 `9222` 无法提供 CDP，会自动改用 `9223`。重复执行会复用已有 CDP 页面，不会新增托盘实例，也不会替换你正常使用的 Codex 数据目录。
+Windows 启动器会先复用已有的 CDP 页面。如果没有可用页面，只会在 `9223` 启动一个独立的临时用户目录，等待 CDP 成功后再优雅关闭旧的可见 Codex/ChatGPT 窗口。重复执行会复用已有 CDP 页面，不会新增托盘实例，也不会替换你正常使用的 Codex 数据目录。
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\apply-windows-skin.ps1 .\skins\cyber-neon -Port 9223 -Timeout 30
