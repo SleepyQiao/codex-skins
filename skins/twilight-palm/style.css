@@ -22,6 +22,10 @@ html[data-dream-theme="twilight-palm"]
   [class*="home-suggestions"]
   button.min-h-26:hover {
   background: rgb(34 22 48 / 50%) !important;
-  border-color: rgb(255 192 159 / 22%) !important;
+  border-color: rgb(255 210 154 / 58%) !important;
+  box-shadow:
+    0 0 0 1px rgb(255 210 154 / 12%),
+    0 0 16px rgb(255 171 103 / 14%),
+    0 12px 30px rgb(4 2 12 / 22%) !important;
   outline: none !important;
 }
