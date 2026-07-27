@@ -17,7 +17,7 @@ On Windows, the Codex toolbar and other native controls may retain system-contro
 
 ## Use A Skin On Windows
 
-1. Save any work in Codex. The launcher starts one isolated CDP-enabled profile, then gracefully closes older visible Codex/ChatGPT windows; it never force-terminates processes.
+1. Save any work in Codex. The launcher starts one isolated CDP-enabled profile, then gracefully closes older visible windows and exits matching older desktop background processes; it never uses forced termination.
 2. Open PowerShell and run the launcher with a skin directory.
 
 ```powershell

@@ -40,6 +40,8 @@ foreach ($fragment in @(
   'Stop-CodexGracefully -ExcludeIds',
   '$existingProcessIds',
   '$newProcessIds',
+  'Stop-CodexBackgroundProcesses',
+  'Stop-Process -Id',
   'http://127.0.0.1:',
   'Runtime.evaluate',
   "PSObject.Properties['error']",

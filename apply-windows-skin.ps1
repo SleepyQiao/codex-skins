@@ -293,6 +293,23 @@ function Stop-CodexGracefully([int]$TimeoutSeconds = 15, [int[]]$ExcludeIds = @(
     Stop-Launcher 3 'Codex/ChatGPT 未能正常关闭旧窗口；为避免意外终止，脚本没有强制结束进程。请先处理旧窗口中的未保存内容后重试。'
   }
 }
+function Stop-CodexBackgroundProcesses(
+  [string]$ExecutablePath,
+  [int[]]$ProcessIds,
+  [int[]]$ExcludeIds = @()
+) {
+  foreach ($id in $ProcessIds) {
+    if ($ExcludeIds -contains $id) { continue }
+    $process = Get-Process -Id $id -ErrorAction SilentlyContinue
+    if ($null -eq $process) { continue }
+    try {
+      if ($process.Path -ne $ExecutablePath) { continue }
+      Stop-Process -Id $id -ErrorAction SilentlyContinue
+    } catch {
+      Write-Verbose "Unable to close old Codex process ${id}: $($_.Exception.Message)"
+    }
+  }
+}
 function Set-CodexWindowChrome([string]$SwatchColor, [int]$TimeoutSeconds = 4) {
   try {
     if ($SwatchColor -notmatch '^#[0-9a-fA-F]{6}$') { return }
@@ -460,6 +477,7 @@ try {
   }
   if ($null -eq $target) {
     $existingProcessIds = @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue |
+      Where-Object { $_.Path -eq $executable } |
       Select-Object -ExpandProperty Id)
     $startupPort = if ($Port -eq 9222) { 9223 } else { $Port }
     Start-Codex $startupPort
@@ -469,12 +487,13 @@ try {
     }
     $target = Find-CdpTarget $Port $Timeout
     $newProcessIds = @(Get-Process -Name 'Codex','ChatGPT' -ErrorAction SilentlyContinue |
-      Where-Object { $existingProcessIds -notcontains $_.Id } |
+      Where-Object { $_.Path -eq $executable -and $existingProcessIds -notcontains $_.Id } |
       Select-Object -ExpandProperty Id)
     if ($newProcessIds.Count -eq 0) {
       Stop-Launcher 3 '已打开 CDP 页面但无法识别新启动的 Codex 进程；为避免关闭错误窗口，脚本停止执行。'
     }
     Stop-CodexGracefully -ExcludeIds $newProcessIds
+    Stop-CodexBackgroundProcesses $executable $existingProcessIds $newProcessIds
   }
   Set-CodexWindowChrome $swatch
   $nodePath = Get-CodexNodeRuntime $executable
