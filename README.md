@@ -52,7 +52,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 
 ## Use A Skin On macOS
 
-The one-sentence instruction above works on macOS as well. To run it manually, use this one-line installer and change `SKIN=flame-zhaoxin` to any skin ID below:
+To run the macOS launcher manually, use this one-line installer and change `SKIN=flame-zhaoxin` to any skin ID below:
 
 ```bash
 SKIN=flame-zhaoxin bash -lc 'ROOT="$HOME/Library/Application Support/FollowCodex"; REPO="$ROOT/codex-skins"; mkdir -p "$ROOT"; if [ -d "$REPO/.git" ]; then git -C "$REPO" pull --ff-only; else git clone https://github.com/SleepyQiao/codex-skins.git "$REPO"; fi; if [ ! -L "$ROOT/skins" ]; then [ -e "$ROOT/skins" ] && mv "$ROOT/skins" "$ROOT/skins.backup-$(date +%Y%m%d-%H%M%S)"; fi; ln -sfn "$REPO/skins" "$ROOT/skins"; cd "$REPO" && ./apply-mac-skin.sh "$SKIN"'

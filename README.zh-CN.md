@@ -52,7 +52,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 
 ## macOS 使用方式
 
-上面的一句话指令同样适用于 macOS。手动执行时，复制下面这一行，并把 `SKIN=flame-zhaoxin` 换成下表中的任意皮肤 ID：
+手动执行 macOS 启动器时，复制下面这一行，并把 `SKIN=flame-zhaoxin` 换成下表中的任意皮肤 ID：
 
 ```bash
 SKIN=flame-zhaoxin bash -lc 'ROOT="$HOME/Library/Application Support/FollowCodex"; REPO="$ROOT/codex-skins"; mkdir -p "$ROOT"; if [ -d "$REPO/.git" ]; then git -C "$REPO" pull --ff-only; else git clone https://github.com/SleepyQiao/codex-skins.git "$REPO"; fi; if [ ! -L "$ROOT/skins" ]; then [ -e "$ROOT/skins" ] && mv "$ROOT/skins" "$ROOT/skins.backup-$(date +%Y%m%d-%H%M%S)"; fi; ln -sfn "$REPO/skins" "$ROOT/skins"; cd "$REPO" && ./apply-mac-skin.sh "$SKIN"'
