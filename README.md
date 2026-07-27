@@ -15,6 +15,14 @@ Both platform launchers use the Node runtime bundled inside the Codex desktop ap
 
 On Windows, the Codex toolbar and other native controls may retain system-controlled colors, so a skin cannot guarantee perfectly unified colors across every toolbar element. macOS does not have this limitation.
 
+## One-Sentence Codex Setup (Windows/macOS)
+
+Send this single sentence to Codex from either Windows or macOS. Replace `purple-gunner` with any skin ID from the table below:
+
+```text
+Install or update https://github.com/SleepyQiao/codex-skins, choose the launcher for this operating system, apply the `purple-gunner` skin, preserve all Codex features and the normal upgrade mechanism, keep only one successfully injected desktop instance, and report the result.
+```
+
 ## Use A Skin On Windows
 
 1. Save any work in Codex. The launcher starts one isolated CDP-enabled profile, then gracefully closes older visible windows and exits matching older desktop background processes; it never uses forced termination.
@@ -44,9 +52,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 
 ## Use A Skin On macOS
 
-In Codex, say: `Install SleepyQiao/codex-skins and apply the flame-zhaoxin skin.`
-
-Or run this one-line installer yourself. Change `SKIN=flame-zhaoxin` to any skin ID below:
+The one-sentence instruction above works on macOS as well. To run it manually, use this one-line installer and change `SKIN=flame-zhaoxin` to any skin ID below:
 
 ```bash
 SKIN=flame-zhaoxin bash -lc 'ROOT="$HOME/Library/Application Support/FollowCodex"; REPO="$ROOT/codex-skins"; mkdir -p "$ROOT"; if [ -d "$REPO/.git" ]; then git -C "$REPO" pull --ff-only; else git clone https://github.com/SleepyQiao/codex-skins.git "$REPO"; fi; if [ ! -L "$ROOT/skins" ]; then [ -e "$ROOT/skins" ] && mv "$ROOT/skins" "$ROOT/skins.backup-$(date +%Y%m%d-%H%M%S)"; fi; ln -sfn "$REPO/skins" "$ROOT/skins"; cd "$REPO" && ./apply-mac-skin.sh "$SKIN"'

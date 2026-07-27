@@ -15,6 +15,14 @@
 
 Windows 版 Codex 的工具栏及其他原生控件颜色可能仍由系统控制，因此皮肤无法保证所有工具栏元素的颜色完全统一。macOS 版没有此限制。
 
+## Windows/macOS 一句话安装
+
+在 Windows 或 macOS 的 Codex 对话中发送下面这一句话即可。将 `purple-gunner` 替换为下表中的任意皮肤 ID：
+
+```text
+请从 https://github.com/SleepyQiao/codex-skins 安装或更新皮肤仓库，根据当前操作系统自动选择 Windows 或 macOS 启动器，应用 `purple-gunner` 皮肤，不修改 Codex 原有功能和正常升级机制，只保留一个成功注入的桌面实例，并告诉我执行结果。
+```
+
 ## Windows 使用方式
 
 1. 先保存 Codex 中的工作。启动器会先启动一个独立的 CDP 用户目录，成功后优雅关闭旧的可见窗口并退出匹配的旧桌面后台进程；不会强制结束进程。
@@ -44,9 +52,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test\apply-windows-ski
 
 ## macOS 使用方式
 
-直接对 Codex 说：`安装 SleepyQiao/codex-skins 并应用 flame-zhaoxin 皮肤。`
-
-也可以自己复制这一行执行；把 `SKIN=flame-zhaoxin` 换成下表任意皮肤 ID：
+上面的一句话指令同样适用于 macOS。手动执行时，复制下面这一行，并把 `SKIN=flame-zhaoxin` 换成下表中的任意皮肤 ID：
 
 ```bash
 SKIN=flame-zhaoxin bash -lc 'ROOT="$HOME/Library/Application Support/FollowCodex"; REPO="$ROOT/codex-skins"; mkdir -p "$ROOT"; if [ -d "$REPO/.git" ]; then git -C "$REPO" pull --ff-only; else git clone https://github.com/SleepyQiao/codex-skins.git "$REPO"; fi; if [ ! -L "$ROOT/skins" ]; then [ -e "$ROOT/skins" ] && mv "$ROOT/skins" "$ROOT/skins.backup-$(date +%Y%m%d-%H%M%S)"; fi; ln -sfn "$REPO/skins" "$ROOT/skins"; cd "$REPO" && ./apply-mac-skin.sh "$SKIN"'
