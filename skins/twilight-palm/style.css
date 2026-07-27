@@ -1,0 +1,27 @@
+/* Twilight Palm only: preserve native interaction outside New Task. */
+html.codex-dream-skin[data-dream-theme="twilight-palm"] {
+  --ds-immersive-composer-solid: rgb(var(--ds-panel-rgb) / .62);
+}
+
+html.codex-dream-skin[data-dream-theme="twilight-palm"] .composer-surface-chrome {
+  background: rgb(var(--ds-panel-rgb) / .62) !important;
+}
+
+html[data-dream-theme="twilight-palm"]
+  main.main-surface.dream-skin-new-task-home-visual
+  [class*="home-suggestions"]
+  button.min-h-26 {
+  background: rgb(13 10 25 / 42%) !important;
+  border-color: rgb(255 192 159 / 22%) !important;
+  box-shadow: 0 12px 30px rgb(4 2 12 / 22%) !important;
+  backdrop-filter: none !important;
+}
+
+html[data-dream-theme="twilight-palm"]
+  main.main-surface.dream-skin-new-task-home-visual
+  [class*="home-suggestions"]
+  button.min-h-26:hover {
+  background: rgb(34 22 48 / 50%) !important;
+  border-color: rgb(255 192 159 / 22%) !important;
+  outline: none !important;
+}

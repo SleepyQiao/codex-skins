@@ -1,0 +1,25 @@
+{
+  "id": "twilight-palm",
+  "name": "暮色椰影",
+  "brandSubtitle": "TWILIGHT PALM · CODEX DREAM SKIN",
+  "tagline": "在暮色与海风之间，让下一段灵感靠岸。",
+  "appearance": "dark",
+  "art": {
+    "focusX": 0.78,
+    "focusY": 0.42,
+    "safeArea": "left",
+    "taskMode": "ambient"
+  },
+  "colors": {
+    "background": "#0b0a19",
+    "panel": "#171326",
+    "panelAlt": "#241a34",
+    "accent": "#e88f91",
+    "accentAlt": "#ffc09f",
+    "secondary": "#9e8cc7",
+    "highlight": "#f6a0a1",
+    "text": "#fff3f1",
+    "muted": "#c9bdd3",
+    "line": "rgba(232, 143, 145, .30)"
+  }
+}

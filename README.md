@@ -92,6 +92,7 @@ The launcher injects the selected skin only into Codex's running renderer throug
 | `forest-mist` | Forest Mist | Forest gradient |
 | `cyber-neon` | Cyber Neon | Neon gradient |
 | `romantic-rose` | Romantic Rose | Portrait soft glow |
+| `twilight-palm` | Twilight Palm | Tropical sunset with palm silhouettes |
 
 ## Skin Gallery
 
@@ -105,8 +106,8 @@ Click a thumbnail to preview the skin background at full size.
 | `midnight-aurora` | `dragon-liqing` | `purple-gunner` |
 | <a href="skins/sakura-dawn/thumb.jpg"><img src="skins/sakura-dawn/thumb.jpg" alt="Sakura Dawn thumbnail" width="180"></a> | <a href="skins/amber-dusk/thumb.jpg"><img src="skins/amber-dusk/thumb.jpg" alt="Amber Dusk thumbnail" width="180"></a> | <a href="skins/forest-mist/thumb.jpg"><img src="skins/forest-mist/thumb.jpg" alt="Forest Mist thumbnail" width="180"></a> |
 | `sakura-dawn` | `amber-dusk` | `forest-mist` |
-| <a href="skins/cyber-neon/thumb.jpg"><img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180"></a> | <a href="skins/romantic-rose/thumb.jpg"><img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180"></a> | |
-| `cyber-neon` | `romantic-rose` | |
+| <a href="skins/cyber-neon/thumb.jpg"><img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180"></a> | <a href="skins/romantic-rose/thumb.jpg"><img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180"></a> | <a href="skins/twilight-palm/thumb.jpg"><img src="skins/twilight-palm/thumb.jpg" alt="Twilight Palm thumbnail" width="180"></a> |
+| `cyber-neon` | `romantic-rose` | `twilight-palm` |
 
 ## Repository Layout
 

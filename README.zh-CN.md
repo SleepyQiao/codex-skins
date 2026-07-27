@@ -92,6 +92,7 @@ SKIN=flame-zhaoxin bash -lc 'ROOT="$HOME/Library/Application Support"; REPO="$RO
 | `forest-mist` | 森野薄雾·森野渐变 | 森野渐变 |
 | `cyber-neon` | 赛博霓虹·霓虹渐变 | 霓虹渐变 |
 | `romantic-rose` | 桥本有菜·人物柔光 | 人物柔光 |
+| `twilight-palm` | 暮色椰影·海风晚霞 | 海岛暮色 |
 
 ## 皮肤预览
 
@@ -105,8 +106,8 @@ SKIN=flame-zhaoxin bash -lc 'ROOT="$HOME/Library/Application Support"; REPO="$RO
 | `midnight-aurora` | `dragon-liqing` | `purple-gunner` |
 | <a href="skins/sakura-dawn/thumb.jpg"><img src="skins/sakura-dawn/thumb.jpg" alt="Sakura Dawn thumbnail" width="180"></a> | <a href="skins/amber-dusk/thumb.jpg"><img src="skins/amber-dusk/thumb.jpg" alt="Amber Dusk thumbnail" width="180"></a> | <a href="skins/forest-mist/thumb.jpg"><img src="skins/forest-mist/thumb.jpg" alt="Forest Mist thumbnail" width="180"></a> |
 | `sakura-dawn` | `amber-dusk` | `forest-mist` |
-| <a href="skins/cyber-neon/thumb.jpg"><img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180"></a> | <a href="skins/romantic-rose/thumb.jpg"><img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180"></a> | |
-| `cyber-neon` | `romantic-rose` | |
+| <a href="skins/cyber-neon/thumb.jpg"><img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180"></a> | <a href="skins/romantic-rose/thumb.jpg"><img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180"></a> | <a href="skins/twilight-palm/thumb.jpg"><img src="skins/twilight-palm/thumb.jpg" alt="Twilight Palm thumbnail" width="180"></a> |
+| `cyber-neon` | `romantic-rose` | `twilight-palm` |
 
 ## 仓库目录结构
 
