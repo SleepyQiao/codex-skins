@@ -743,6 +743,20 @@ html.codex-dream-skin main.main-surface > header.app-header-tint {
   backdrop-filter: blur(14px) saturate(108%) !important;
 }
 
+/* Native turn-diff cards otherwise rely on a half-pixel shadow. On themed
+   chat surfaces its right and lower edges disappear, so retain one complete
+   token-coloured frame without changing the card's layout or actions. */
+html.codex-dream-skin
+  main.main-surface:not(.dream-skin-new-task-home-visual)
+  div.flex.max-w-full.flex-col.overflow-hidden.rounded-lg.bg-token-dropdown-background\/50:has(
+    .group\/turn-diff-header
+  ) {
+  border: 1px solid rgb(var(--ds-accent-rgb) / .28) !important;
+  box-shadow:
+    0 6px 18px rgb(var(--ds-bg-rgb) / .10),
+    inset 0 1px rgb(var(--ds-text-rgb) / .06) !important;
+}
+
 /* Midnight Aurora is a fixed dark scene. These native header, selected-row,
    and change-card tokens otherwise remain bound to Codex's light palette,
    yielding black labels and white islands on the aurora artwork. Keep the

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "hatsune-miku-ice-blue",
+  "name": "初音未来•冰蓝",
+  "description": "冰蓝星光",
+  "kind": "dream",
+  "order": 13,
+  "swatchColor": "#31b8d5",
+  "background": "background.jpg",
+  "theme": "theme.json",
+  "style": "style.css"
+}

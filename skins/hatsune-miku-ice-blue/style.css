@@ -1,0 +1,137 @@
+/* 初音未来•冰蓝：新任务直出插画，聊天页使用轻量冰蓝渐变。 */
+
+/* 让新任务页直接呈现原始插画；控件自身仍使用独立的可读材料。 */
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual,
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]:has(
+  main.main-surface.dream-skin-new-task-home-visual
+) aside.app-shell-left-panel {
+  background: transparent !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"]
+):has(main.main-surface:not(.dream-skin-new-task-home-visual)) body {
+  background:
+    linear-gradient(100deg,
+      rgb(var(--ds-panel-rgb) / .30),
+      rgb(var(--ds-bg-rgb) / .18) 58%,
+      rgb(var(--ds-bg-rgb) / .08)),
+    var(--dream-skin-art) !important;
+  background-position: center, var(--ds-art-position) !important;
+  background-size: 100% 100%, cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"]
+):has(main.main-surface:not(.dream-skin-new-task-home-visual)) main.main-surface:not(.dream-skin-new-task-home-visual) {
+  background: linear-gradient(100deg,
+    rgb(var(--ds-panel-rgb) / .48),
+    rgb(var(--ds-panel-rgb) / .26) 65%,
+    rgb(var(--ds-panel-rgb) / .12)) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"]
+):has(main.main-surface:not(.dream-skin-new-task-home-visual)) aside.app-shell-left-panel {
+  background: linear-gradient(90deg,
+    rgb(var(--ds-panel-rgb) / .62),
+    rgb(var(--ds-panel-rgb) / .38)) !important;
+}
+
+/* Keep the native update action and file-location split button in the ice-blue
+   family instead of their embedded blue / white utility colors. */
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"]
+  aside.app-shell-left-panel button.bg-token-charts-blue[aria-label="更新"] {
+  background: var(--ds-accent) !important;
+  color: var(--ds-panel) !important;
+  box-shadow:
+    0 3px 9px rgb(var(--ds-accent-rgb) / .28),
+    inset 0 1px rgb(var(--ds-text-rgb) / .16) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"]
+  aside.app-shell-left-panel button.bg-token-charts-blue[aria-label="更新"] svg {
+  color: currentColor !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"]
+  aside.app-shell-left-panel button.bg-token-charts-blue[aria-label="更新"]:hover {
+  background: var(--ds-accent-soft) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"]
+  main.main-surface > header.app-header-tint button:has(img[src="/apps/file-explorer.png"]),
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"]
+  main.main-surface > header.app-header-tint button:has(img[src="/apps/file-explorer.png"]) + button[aria-label="次要操作"] {
+  background: rgb(var(--ds-panel-2-rgb) / .84) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .32) !important;
+  box-shadow:
+    0 0 0 1px rgb(var(--ds-accent-rgb) / .32),
+    0 4px 12px rgb(var(--ds-bg-rgb) / .10),
+    inset 0 1px rgb(var(--ds-text-rgb) / .06) !important;
+  color: var(--ds-text) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"]
+  main.main-surface > header.app-header-tint button:has(img[src="/apps/file-explorer.png"]):hover,
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"]
+  main.main-surface > header.app-header-tint button:has(img[src="/apps/file-explorer.png"]) + button[aria-label="次要操作"]:hover {
+  background: rgb(var(--ds-accent-rgb) / .16) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .46) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"]
+  main.main-surface > header.app-header-tint button:has(img[src="/apps/file-explorer.png"]) + button[aria-label="次要操作"] svg {
+  color: currentColor !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [data-feature="game-source"] {
+  color: var(--ds-text) !important;
+  text-shadow: var(--ds-content-text-shadow) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [data-feature="game-source"] * {
+  color: inherit !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 {
+  background: rgb(var(--ds-panel-rgb) / .64) !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .20) !important;
+  box-shadow:
+    0 8px 18px rgb(var(--ds-bg-rgb) / .14),
+    inset 0 1px rgb(var(--ds-text-rgb) / .06) !important;
+  backdrop-filter: none !important;
+  color: var(--ds-text) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26:hover {
+  background: rgb(var(--ds-panel-2-rgb) / .76) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .34) !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual :is(
+    [class*="_homeUtilityBar_"],
+    div:has(> .horizontal-scroll-fade-mask [class*="project-selector"])
+  ),
+html.codex-dream-skin[data-dream-theme="preset-hatsune-miku-ice-blue"][data-dream-art-wide="true"]
+  main.main-surface.dream-skin-new-task-home-visual .composer-surface-chrome {
+  background: var(--ds-content-surface-strong) !important;
+  border-color: var(--ds-content-line) !important;
+  box-shadow:
+    var(--ds-content-shadow),
+    inset 0 0 0 1px var(--ds-content-line),
+    inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
+  backdrop-filter: none !important;
+  color: var(--ds-text) !important;
+}
