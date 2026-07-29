@@ -82,6 +82,7 @@ The launcher injects the selected skin only into Codex's running renderer throug
 | ID | Skin | Description |
 | --- | --- | --- |
 | `flame-zhaoxin` | Flame Zhao Xin | Crimson battlefield |
+| `hatsune-miku-ice-blue` | Hatsune Miku Ice Blue | Ice-blue future stage |
 | `lanting-ink-yasuo` | Lanting Ink Yasuo | Ink-wash sword intent |
 | `lanting-ink-tuer-suo` | Lanting Ink Tuer Suo | Rice-paper sword intent |
 | `midnight-aurora` | Midnight Aurora | Aurora gradient |
@@ -98,16 +99,16 @@ The launcher injects the selected skin only into Codex's running renderer throug
 
 Click a thumbnail to preview the skin background at full size.
 
-| | | |
-| --- | --- | --- |
-| <a href="skins/flame-zhaoxin/thumb.jpg"><img src="skins/flame-zhaoxin/thumb.jpg" alt="Flame Zhao Xin thumbnail" width="180"></a> | <a href="skins/lanting-ink-yasuo/thumb.jpg"><img src="skins/lanting-ink-yasuo/thumb.jpg" alt="Lanting Ink Yasuo thumbnail" width="180"></a> | <a href="skins/lanting-ink-tuer-suo/thumb.jpg"><img src="skins/lanting-ink-tuer-suo/thumb.jpg" alt="Lanting Ink Tuer Suo thumbnail" width="180"></a> |
-| `flame-zhaoxin` | `lanting-ink-yasuo` | `lanting-ink-tuer-suo` |
-| <a href="skins/midnight-aurora/thumb.jpg"><img src="skins/midnight-aurora/thumb.jpg" alt="Midnight Aurora thumbnail" width="180"></a> | <a href="skins/dragon-liqing/thumb.jpg"><img src="skins/dragon-liqing/thumb.jpg" alt="Dragon Lee Sin thumbnail" width="180"></a> | <a href="skins/purple-gunner/thumb.jpg"><img src="skins/purple-gunner/thumb.jpg" alt="Purple Gunner thumbnail" width="180"></a> |
-| `midnight-aurora` | `dragon-liqing` | `purple-gunner` |
-| <a href="skins/sakura-dawn/thumb.jpg"><img src="skins/sakura-dawn/thumb.jpg" alt="Sakura Dawn thumbnail" width="180"></a> | <a href="skins/amber-dusk/thumb.jpg"><img src="skins/amber-dusk/thumb.jpg" alt="Amber Dusk thumbnail" width="180"></a> | <a href="skins/forest-mist/thumb.jpg"><img src="skins/forest-mist/thumb.jpg" alt="Forest Mist thumbnail" width="180"></a> |
-| `sakura-dawn` | `amber-dusk` | `forest-mist` |
-| <a href="skins/cyber-neon/thumb.jpg"><img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180"></a> | <a href="skins/romantic-rose/thumb.jpg"><img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180"></a> | <a href="skins/twilight-palm/thumb.jpg"><img src="skins/twilight-palm/thumb.jpg" alt="Twilight Palm thumbnail" width="180"></a> |
-| `cyber-neon` | `romantic-rose` | `twilight-palm` |
+| | | | |
+| --- | --- | --- | --- |
+| <a href="skins/flame-zhaoxin/thumb.jpg"><img src="skins/flame-zhaoxin/thumb.jpg" alt="Flame Zhao Xin thumbnail" width="180"></a> | <a href="skins/hatsune-miku-ice-blue/thumb.jpg"><img src="skins/hatsune-miku-ice-blue/thumb.jpg" alt="Hatsune Miku Ice Blue thumbnail" width="180"></a> | <a href="skins/lanting-ink-yasuo/thumb.jpg"><img src="skins/lanting-ink-yasuo/thumb.jpg" alt="Lanting Ink Yasuo thumbnail" width="180"></a> | <a href="skins/lanting-ink-tuer-suo/thumb.jpg"><img src="skins/lanting-ink-tuer-suo/thumb.jpg" alt="Lanting Ink Tuer Suo thumbnail" width="180"></a> |
+| `flame-zhaoxin` | `hatsune-miku-ice-blue` | `lanting-ink-yasuo` | `lanting-ink-tuer-suo` |
+| <a href="skins/midnight-aurora/thumb.jpg"><img src="skins/midnight-aurora/thumb.jpg" alt="Midnight Aurora thumbnail" width="180"></a> | <a href="skins/dragon-liqing/thumb.jpg"><img src="skins/dragon-liqing/thumb.jpg" alt="Dragon Lee Sin thumbnail" width="180"></a> | <a href="skins/purple-gunner/thumb.jpg"><img src="skins/purple-gunner/thumb.jpg" alt="Purple Gunner thumbnail" width="180"></a> | <a href="skins/sakura-dawn/thumb.jpg"><img src="skins/sakura-dawn/thumb.jpg" alt="Sakura Dawn thumbnail" width="180"></a> |
+| `midnight-aurora` | `dragon-liqing` | `purple-gunner` | `sakura-dawn` |
+| <a href="skins/amber-dusk/thumb.jpg"><img src="skins/amber-dusk/thumb.jpg" alt="Amber Dusk thumbnail" width="180"></a> | <a href="skins/forest-mist/thumb.jpg"><img src="skins/forest-mist/thumb.jpg" alt="Forest Mist thumbnail" width="180"></a> | <a href="skins/cyber-neon/thumb.jpg"><img src="skins/cyber-neon/thumb.jpg" alt="Cyber Neon thumbnail" width="180"></a> | <a href="skins/romantic-rose/thumb.jpg"><img src="skins/romantic-rose/thumb.jpg" alt="Romantic Rose thumbnail" width="180"></a> |
+| `amber-dusk` | `forest-mist` | `cyber-neon` | `romantic-rose` |
+| <a href="skins/twilight-palm/thumb.jpg"><img src="skins/twilight-palm/thumb.jpg" alt="Twilight Palm thumbnail" width="180"></a> |  |  |  |
+| `twilight-palm` |  |  |  |
 
 ## Repository Layout
 
