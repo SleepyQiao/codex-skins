@@ -294,6 +294,61 @@ html.codex-dream-skin main.main-surface {
   box-shadow: -8px 0 28px rgb(var(--ds-bg-rgb) / .18) !important;
 }
 
+/* Codex 2026.7 renamed the chat surface from `.main-surface` to a CSS-module
+   class and exposes this stable app-shell attribute instead. Keep the artwork
+   on the page canvas and make the new opaque surface use the same translucent
+   chat veil as the legacy surface. This is shared by every skin package. */
+html.codex-dream-skin:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"],
+  [data-dream-task-mode="banner"],
+  [data-dream-art-task-mode="banner"]
+):has(main[data-app-shell-main-surface]:not(.dream-skin-home-shell)) body {
+  background-image: var(--dream-skin-art) !important;
+  background-position: var(--ds-art-position) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+
+html.codex-dream-skin:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"],
+  [data-dream-task-mode="banner"],
+  [data-dream-art-task-mode="banner"]
+) main[data-app-shell-main-surface]:not(.dream-skin-home-shell) {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden !important;
+  background: linear-gradient(90deg,
+    var(--ds-task-immersive-edge),
+    var(--ds-task-immersive-mid) 64%,
+    var(--ds-task-immersive-far)) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"],
+  [data-dream-task-mode="banner"],
+  [data-dream-art-task-mode="banner"]
+) main[data-app-shell-main-surface]:not(.dream-skin-home-shell) > :not(header) {
+  position: relative;
+  z-index: 1;
+}
+
+html.codex-dream-skin:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"],
+  [data-dream-task-mode="banner"],
+  [data-dream-art-task-mode="banner"]
+) main[data-app-shell-main-surface]:not(.dream-skin-home-shell)
+  .thread-scroll-container .bg-gradient-to-t.from-token-main-surface-primary {
+  background: transparent !important;
+}
+
 html.codex-dream-skin main.main-surface:not(.dream-skin-home-shell)::before {
   content: "";
   position: absolute;

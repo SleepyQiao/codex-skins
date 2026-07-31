@@ -2,16 +2,33 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-node_bin='/Applications/Codex.app/Contents/Resources/cua_node/bin/node'
+node_bin=''
+for candidate in \
+  '/Applications/Codex.app/Contents/Resources/cua_node/bin/node' \
+  "$HOME/Applications/Codex.app/Contents/Resources/cua_node/bin/node" \
+  '/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node' \
+  "$HOME/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+do
+  if [[ -x "$candidate" ]]; then
+    node_bin="$candidate"
+    break
+  fi
+done
 
-"$node_bin" --check "$root/runtime/apply-skin.cjs"
-
-if [[ "$(head -n 1 "$root/apply-mac-skin.sh")" != "#!$node_bin" ]]; then
-  echo 'launcher must enter through the Codex-bundled Node runtime.' >&2
+if [[ -z "$node_bin" ]]; then
+  echo 'no Codex or ChatGPT bundled Node runtime found' >&2
   exit 1
 fi
 
-for marker in 'acquireLock' 'targetForPort' 'waitForTarget' 'new WebSocket' 'cua_node' 'remote-debugging-port' 'Another skin application is already running' 'syncCodexThemeForSkin' 'appearanceTheme' '主题不一致'; do
+"$node_bin" --check "$root/runtime/apply-skin.cjs"
+bash -n "$root/apply-mac-skin.sh"
+
+if [[ "$(head -n 1 "$root/apply-mac-skin.sh")" != '#!/bin/sh' ]]; then
+  echo 'launcher must use the portable shell entrypoint.' >&2
+  exit 1
+fi
+
+for marker in 'acquireLock' 'targetForPort' 'waitForTarget' 'new WebSocket' 'cua_node' 'ChatGPT.app' 'remote-debugging-port' 'Another skin application is already running' 'syncCodexThemeForSkin' 'appearanceTheme' '主题不一致'; do
   if ! grep -F -- "$marker" "$root/runtime/apply-skin.cjs" >/dev/null; then
     echo "missing required launcher marker: $marker" >&2
     exit 1

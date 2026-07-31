@@ -7,9 +7,9 @@ A collection of desktop skins for Codex, with launchers that inject the selected
 - Windows with the Codex desktop application installed. The launcher prefers the Microsoft Store package (`OpenAI.Codex`).
 - Windows PowerShell 5.1 or later.
 - The Windows launcher supports both Codex.exe and ChatGPT.exe desktop process names.
-- macOS with Codex installed at `/Applications/Codex.app`. The macOS launcher uses Codex's bundled Node runtime, so Homebrew or a global Node.js install is not required.
+- macOS with Codex at `/Applications/Codex.app` or the current unified desktop app at `/Applications/ChatGPT.app`. The macOS launcher uses the app's bundled Node runtime, so Homebrew or a global Node.js install is not required.
 
-Both platform launchers use the Node runtime bundled inside the Codex desktop application. Windows resolves `resources\cua_node\bin\node.exe`; macOS resolves `Contents/Resources/cua_node/bin/node`. The shared `runtime/apply-skin.cjs` handles the platform-neutral CDP payload evaluation, while the `.ps1` and `.sh` files keep platform-specific launch and restart behavior. No system Node.js installation is required.
+Both platform launchers use the Node runtime bundled inside the Codex desktop application. Windows resolves `resources\cua_node\bin\node.exe`; macOS resolves `Contents/Resources/cua_node/bin/node` from Codex or the unified ChatGPT desktop app. The shared `runtime/apply-skin.cjs` handles the platform-neutral CDP payload evaluation, while the `.ps1` and `.sh` files keep platform-specific launch and restart behavior. No system Node.js installation is required.
 
 ## Platform Limitation
 
