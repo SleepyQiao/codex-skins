@@ -357,6 +357,14 @@ html.codex-dream-skin main[data-app-shell-main-surface]
   background: transparent !important;
 }
 
+/* The current main content frame adds a half-pixel native separator below the
+   header. On artwork it renders as a dotted line, so keep its geometry while
+   clearing only that top border. */
+html.codex-dream-skin main[data-app-shell-main-surface]
+  [class*="_MainContentFrame_"] {
+  border-top: 0 !important;
+}
+
 /* The current sidebar keeps a 20px :after extension for its resize gutter.
    Once the skin paints the sidebar itself, that native extension inherits a
    dark surface and reads as a vertical shadow on the artwork. Keep the
