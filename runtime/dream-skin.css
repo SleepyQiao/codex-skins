@@ -349,6 +349,76 @@ html.codex-dream-skin:is(
   background: transparent !important;
 }
 
+/* Current Codex keeps the legacy sidebar element but paints it with a nearly
+   opaque panel colour. Match the main veil at the shared edge so artwork and
+   hue flow continuously from sidebar to chat. */
+html.codex-dream-skin:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"],
+  [data-dream-task-mode="banner"],
+  [data-dream-art-task-mode="banner"]
+):has(main[data-app-shell-main-surface]:not(.dream-skin-new-task-home-visual))
+  aside.app-shell-left-panel {
+  background: linear-gradient(90deg,
+    rgb(var(--ds-bg-rgb) / .66),
+    var(--ds-task-immersive-edge) 100%) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* The modern New Task page is the same main surface with a route marker.
+   Give it the artwork-forward home veil and carry that material into the
+   sidebar, while keeping the native four-card layout untouched. */
+html.codex-dream-skin[data-dream-art-wide="true"]
+  main[data-app-shell-main-surface].dream-skin-new-task-home-visual {
+  background: linear-gradient(90deg,
+    var(--ds-immersive-edge),
+    var(--ds-immersive-mid) 64%,
+    var(--ds-immersive-far)) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"]:has(
+  main[data-app-shell-main-surface].dream-skin-new-task-home-visual
+) aside.app-shell-left-panel {
+  background: linear-gradient(90deg,
+    rgb(var(--ds-bg-rgb) / .28),
+    var(--ds-immersive-edge) 100%) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* The new home cards retain their native layout and actions, but Codex 2026.7
+   no longer matches the legacy package selectors. Supply one transparent
+   token material for every skin; package-specific rules can still refine it. */
+html.codex-dream-skin[data-dream-art-wide="true"]
+  main[data-app-shell-main-surface].dream-skin-new-task-home-visual
+  [class*="home-suggestions"] button.min-h-26 {
+  background: rgb(var(--ds-panel-rgb) / .46) !important;
+  border: 1px solid rgb(var(--ds-accent-rgb) / .20) !important;
+  box-shadow:
+    0 8px 18px rgb(var(--ds-bg-rgb) / .16),
+    inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
+  backdrop-filter: none !important;
+  color: var(--ds-text) !important;
+}
+
+html.codex-dream-skin[data-dream-art-wide="true"]
+  main[data-app-shell-main-surface].dream-skin-new-task-home-visual
+  [class*="home-suggestions"] button.min-h-26:hover {
+  background: rgb(var(--ds-panel-2-rgb) / .52) !important;
+  border-color: rgb(var(--ds-accent-rgb) / .36) !important;
+  box-shadow:
+    0 10px 22px rgb(var(--ds-bg-rgb) / .22),
+    inset 0 1px rgb(var(--ds-text-rgb) / .12) !important;
+}
+
 html.codex-dream-skin main.main-surface:not(.dream-skin-home-shell)::before {
   content: "";
   position: absolute;

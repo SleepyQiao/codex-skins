@@ -1,17 +1,17 @@
 /* 龙的传人·李青：保持左侧安全区与右侧金龙人物的完整可见。 */
 html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
-  main.main-surface.dream-skin-new-task-home-visual [data-feature="game-source"] {
+  main:is(.main-surface, [data-app-shell-main-surface]).dream-skin-new-task-home-visual [data-feature="game-source"] {
   color: var(--ds-text) !important;
   text-shadow: var(--ds-content-text-shadow) !important;
 }
 
 html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
-  main.main-surface.dream-skin-new-task-home-visual [data-feature="game-source"] * {
+  main:is(.main-surface, [data-app-shell-main-surface]).dream-skin-new-task-home-visual [data-feature="game-source"] * {
   color: inherit !important;
 }
 
 html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
-  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 {
+  main:is(.main-surface, [data-app-shell-main-surface]).dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 {
   background: rgb(var(--ds-panel-rgb) / .42) !important;
   border: 1px solid rgb(var(--ds-accent-rgb) / .24) !important;
   box-shadow:
@@ -22,17 +22,17 @@ html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-
 }
 
 html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
-  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 * {
+  main:is(.main-surface, [data-app-shell-main-surface]).dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 * {
   color: inherit !important;
 }
 
 html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
-  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 svg {
+  main:is(.main-surface, [data-app-shell-main-surface]).dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26 svg {
   color: var(--ds-accent) !important;
 }
 
 html.codex-dream-skin[data-dream-theme="preset-dragon-descendant-li-qing"][data-dream-art-wide="true"]
-  main.main-surface.dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26:hover {
+  main:is(.main-surface, [data-app-shell-main-surface]).dream-skin-new-task-home-visual [class*="home-suggestions"] button.min-h-26:hover {
   background: rgb(var(--ds-panel-rgb) / .42) !important;
   border-color: rgb(var(--ds-accent-rgb) / .52) !important;
   box-shadow:
