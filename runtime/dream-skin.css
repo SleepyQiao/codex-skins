@@ -357,6 +357,16 @@ html.codex-dream-skin main[data-app-shell-main-surface]
   background: transparent !important;
 }
 
+/* The current sidebar keeps a 20px :after extension for its resize gutter.
+   Once the skin paints the sidebar itself, that native extension inherits a
+   dark surface and reads as a vertical shadow on the artwork. Keep the
+   gutter's geometry and pointer behavior, but make only its paint clear. */
+html.codex-dream-skin:has(main[data-app-shell-main-surface])
+  aside.app-shell-left-panel::after {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 /* Current Codex keeps the legacy sidebar element but paints it with a nearly
    opaque panel colour. Match the main veil at the shared edge so artwork and
    hue flow continuously from sidebar to chat. */
