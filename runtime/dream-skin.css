@@ -349,6 +349,14 @@ html.codex-dream-skin:is(
   background: transparent !important;
 }
 
+/* Codex 2026.7 adds an absolute 16px top fade to the new main viewport. Its
+   fixed native dark colour creates a hard black strip above themed artwork. */
+html.codex-dream-skin main[data-app-shell-main-surface]
+  [class*="_MainContentTopFade_"] {
+  display: none !important;
+  background: transparent !important;
+}
+
 /* Current Codex keeps the legacy sidebar element but paints it with a nearly
    opaque panel colour. Match the main veil at the shared edge so artwork and
    hue flow continuously from sidebar to chat. */

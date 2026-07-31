@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const { execFileSync, spawnSync } = require("child_process");
 
 const root = path.resolve(__dirname, "..");
@@ -217,7 +218,9 @@ function buildExpression(skin) {
     __DREAM_SKIN_ART_JSON__: JSON.stringify(`data:${mimeFor(background)};base64,${fs.readFileSync(background).toString("base64")}`),
     __DREAM_SKIN_THEME_JSON__: JSON.stringify(theme),
     __DREAM_SKIN_VERSION_JSON__: JSON.stringify("standalone-codex-skin-1"),
-    __DREAM_SKIN_STYLE_REVISION_JSON__: JSON.stringify(`standalone-${theme.id || "custom"}-${style.length}`),
+    __DREAM_SKIN_STYLE_REVISION_JSON__: JSON.stringify(
+      `standalone-${theme.id || "custom"}-${crypto.createHash("sha256").update(`${css}\n${style}`).digest("hex").slice(0, 12)}`,
+    ),
   };
   for (const [token, value] of Object.entries(replacements)) {
     if (!renderer.includes(token)) fail(`renderer-inject.js is missing ${token}`);
