@@ -44,6 +44,35 @@ html.codex-dream-skin[data-dream-theme="preset-purple-gunner"] {
   --ds-immersive-composer-solid: rgb(var(--ds-panel-rgb) / .74);
 }
 
+html.codex-dream-skin[data-dream-theme="preset-purple-gunner"][data-dream-art-wide="true"]
+  main.dream-skin-new-task-home-visual
+  .flex.w-full.flex-col.gap-2.relative > .absolute.inset-0.-z-10.bg-token-input-background {
+  background: rgb(var(--ds-panel-rgb) / .08) !important;
+  background-color: rgb(var(--ds-panel-rgb) / .08) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-purple-gunner"][data-dream-art-wide="true"]
+  main.dream-skin-new-task-home-visual .dream-skin-home-utility {
+  background: rgb(var(--ds-panel-rgb) / .10) !important;
+  background-color: rgb(var(--ds-panel-rgb) / .10) !important;
+  box-shadow:
+    inset 1px 0 rgb(var(--ds-muted-rgb) / .10),
+    inset -1px 0 rgb(var(--ds-muted-rgb) / .10),
+    inset 0 1px rgb(var(--ds-muted-rgb) / .10) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-purple-gunner"][data-dream-art-wide="true"]
+  .dream-skin-new-task-home-visual .composer-surface-chrome {
+  background: rgb(var(--ds-panel-rgb) / .60) !important;
+  background-color: rgb(var(--ds-panel-rgb) / .60) !important;
+  box-shadow:
+    0 10px 26px rgb(var(--ds-bg-rgb) / .22),
+    inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
+  backdrop-filter: none !important;
+}
+
 html.codex-dream-skin[data-dream-theme="preset-purple-gunner"]
   .composer-surface-chrome {
   background: rgb(var(--ds-panel-rgb) / .74) !important;
@@ -51,7 +80,21 @@ html.codex-dream-skin[data-dream-theme="preset-purple-gunner"]
   box-shadow:
     0 10px 26px rgb(var(--ds-bg-rgb) / .22),
     inset 0 1px rgb(var(--ds-text-rgb) / .08) !important;
-  backdrop-filter: blur(14px) saturate(104%) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-dream-skin[data-dream-theme="preset-purple-gunner"][data-dream-art-wide="true"]:is(
+  [data-dream-task-mode="ambient"],
+  [data-dream-art-task-mode="ambient"]
+)
+  .thread-scroll-container .composer-surface-chrome {
+  background: rgb(var(--ds-panel-rgb) / .70) !important;
+  background-color: rgb(var(--ds-panel-rgb) / .70) !important;
+  border: 0 !important;
+  box-shadow:
+    0 8px 22px rgb(var(--ds-bg-rgb) / .16),
+    inset 0 0 0 1px var(--ds-immersive-line) !important;
+  backdrop-filter: none !important;
 }
 
 html.codex-dream-skin[data-dream-theme="preset-purple-gunner"]
